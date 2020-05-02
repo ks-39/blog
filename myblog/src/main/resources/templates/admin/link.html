@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<!--导入thymeleaf-->
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--1. 引入headerCss-->
+<head th:replace="admin/common-template/headCss::head('Admin | Link')"></head>
+
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+    <!--2. 引入header代码-->
+    <nav th:replace="admin/common-template/header"></nav>
+
+    <!--3. 引入sidebar-menu-->
+    <aside th:replace="admin/common-template/sidebar-menu"></aside>
+
+    <!--4. 引入index-->
+    <div th:replace="admin/page-fragment/link"></div>
+
+    <aside class="control-sidebar control-sidebar-dark">
+    </aside>
+
+</div>
+
+<!--6. 引入footer-->
+<footer th:replace="admin/common-template/footer"></footer>
+
+<!--7. 引入footerScript-->
+<th:block th:replace="admin/common-template/footScript"/>
+
+<!--8. 引入pjax-->
+<th:block th:replace="admin/common-template/pjax"/>
+
+<!--pjax为null时调用这个js-->
+<script type="text/javascript">
+
+    //1. 添加事件模态框
+    $("#AddLink").click(function () {
+        $("#addModal").modal();
+        return;
+    });
+
+    //2. 添加事件
+    $("#addLinkButton").click(function () {
+
+        //1. 自定义校验
+        var name = $("#addLinkName").val();
+        if($.trim(name) === ''){
+            alert("请输入链接名称");
+            return ;
+        }
+
+        var url = $("#addLinkUrl").val();
+        if($.trim(url) === ''){
+            alert("请输入链接URL");
+            return ;
+        }
+
+        //2. 提取数据
+        var url = "/admin/link/add";
+        var data = {
+            link_name : $("#addLinkName").val(),
+            link_url : $("#addLinkUrl").val()
+        };
+
+        alert("添加成功");
+        $("#addModal").modal('hide');   //隐藏模态框
+        $('.modal-backdrop').remove();//去掉遮罩层
+        $("#AdminContent").load(url,data);
+    });
+
+    //3. 删除事件
+    function deleteById(id) {
+
+        var msg = confirm("您真的确定要删除吗？");
+        if(msg == true) {
+
+            var url = "/admin/link/delete";
+            var data = {
+                link_id: id
+            };
+            alert("删除成功");
+            $("#AdminContent").load(url, data);
+        }else {
+            return false;
+        }
+    }
+
+    //4. 修改事件模态框
+    function edit(id,name,link_url) {
+        //1. 打开模态框
+        $("#editModal").modal();
+
+        //2. 回填数据
+        $("#linkId").val(id);
+        $("#editLinkName").val(name);
+        $("#editLinkUrl").val(link_url);
+    }
+
+    //5. 修改事件
+    $("#editLinkButton").click(function () {
+
+        //3. 自定义校验
+        var test_name = $("#editLinkName").val();
+        if($.trim(test_name) === ''){
+            alert("请输入链接名称");
+            return;
+        }
+
+        var test_url = $("#editLinkUrl").val();
+        if($.trim(test_url) === ''){
+            alert("请输入链接URL");
+            return;
+        }
+
+        //4. 提取数据
+        var url = "/admin/link/edit";
+        var data = {
+            link_id : $("#linkId").val(),
+            link_name : $("#editLinkName").val(),
+            link_url : $("#editLinkUrl").val()
+        };
+
+        alert("修改成功");
+        $("#editModal").modal('hide');   //隐藏模态框
+        $('.modal-backdrop').remove();//去掉遮罩层
+        $("#AdminContent").load(url,data);
+    });
+
+</script>
+
+</body>
+
+</html>

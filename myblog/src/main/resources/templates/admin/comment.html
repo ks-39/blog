@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!--导入thymeleaf-->
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--1. 引入headerCss-->
+<head th:replace="admin/common-template/headCss::head('Admin | Comment')"></head>
+
+
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+    <!--2. 引入header代码-->
+    <nav th:replace="admin/common-template/header"></nav>
+
+    <!--3. 引入sidebar-menu-->
+    <aside th:replace="admin/common-template/sidebar-menu"></aside>
+
+    <!--4. 引入index-->
+    <div th:replace="admin/page-fragment/comment"></div>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+
+</div>
+<!-- ./wrapper -->
+
+<!--6. 引入footer-->
+<footer th:replace="admin/common-template/footer"></footer>
+
+<!--7. 引入footerScript-->
+<th:block th:replace="admin/common-template/footScript"/>
+
+<!--8. 引入pjax-->
+<th:block th:replace="admin/common-template/pjax"/>
+
+<!--pjax为null时-->
+<script type="text/javascript">
+
+    //4. 修改事件模态框
+    function edit(id,content) {
+        //1. 打开模态框
+        $("#editModal").modal();
+
+        //2. 回填数据
+        $("#commentId").val(id);
+        $("#commentContent").val(content);
+    }
+
+    //5. 修改事件
+    $("#editCommentButton").click(function () {
+
+        //4. 提取数据
+        var url = "/admin/comment/edit";
+        var data = {
+            comment_id : $("#commentId").val(),
+            comment_status : $("#status input:checked").val(),
+        };
+
+        alert("修改成功");
+        $("#editModal").modal('hide');   //隐藏模态框
+        $('.modal-backdrop').remove();//去掉遮罩层
+        $("#AdminContent").load(url,data);
+    });
+
+    //初始化Date range picker
+    $('#reservation').daterangepicker();
+    //Date range picker with time picker
+    $('#reservationtime').daterangepicker({
+        timePicker         : true,
+        timePickerIncrement: 30,
+    });
+
+    $('input[id="reservation"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+    });
+
+    //搜素事件
+    $("#searchDate").click(function () {
+        var time = $("#reservation").val();
+        var times = time.split(' - ');
+
+        var url = "/admin/comment/search";
+        var data = {
+            start_time: times[0],
+            end_time: times[1],
+        };
+
+        $("#AdminContent").load(url,data);
+    });
+
+    //初始化checkbox样式
+    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+        checkboxClass: 'icheckbox_flat-green',
+        radioClass   : 'iradio_flat-green'
+    })
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,230 @@
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo 标题Logo-->
+    <a th:href="@{/admin/index}" class="brand-link">
+        <span class="brand-text font-weight-light"> k$-39 | Admin </span>
+    </a>
+
+    <!-- Sidebar 左侧菜单栏-->
+    <div class="sidebar">
+
+        <!-- Sidebar user panel (头像和昵称) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="http://q956h1atc.bkt.clouddn.com/微信图片_20200121191754.jpg" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a th:href="@{/admin/index}" class="d-block">k$-39</a>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu (菜单栏)-->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+                <!--首页-->
+                <li class="nav-item">
+                    <a th:href="@{/admin/index}" class="nav-link">
+                        <i class="nav-icon fa fa-home"></i>
+                        <p>
+                            首页
+                        </p>
+                    </a>
+                </li>
+
+                <!--config配置-->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa fa-pencil"></i>
+                        <p>
+                            个性化配置
+                            <i class="right fa fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item">
+                            <a th:href="@{/admin/config}" class="nav-link">
+                                <i class="fa fa-edit nav-icon"></i>
+                                <p style="font-size: 15px">博客个性化配置</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a th:href="@{/admin/link}" class="nav-link">
+                                <i class="fa fa-share nav-icon"></i>
+                                <p style="font-size: 15px">个人社交媒体链接</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <!--blog博客管理-->
+                <li class="nav-item has-treeview">
+
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa fa-file"></i>
+                        <p>
+                            博客管理
+                            <i class="fa fa-angle-left right"></i>
+                        </p>
+                    </a>
+
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item">
+                            <a th:href="@{/admin/blog}" class="nav-link">
+                                <i class="fa fa-th-list nav-icon"></i>
+                                <p style="font-size: 15px">博客列表</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a th:href="@{/admin/blog/edit}" class="nav-link">
+                                <i class="fa fa-print nav-icon"></i>
+                                <p style="font-size: 15px">发布博客</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--category分类管理-->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa fa-tasks"></i>
+                        <p>
+                            分类管理
+                            <i class="fa fa-angle-left right"></i>
+                        </p>
+                    </a>
+
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a th:href="@{/admin/category}" class="nav-link">
+                                <i class="fa fa-tasks nav-icon"></i>
+                                <p style="font-size: 15px">分类列表</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--tag标签管理-->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa fa-tags"></i>
+                        <p>
+                            标签管理
+                            <i class="fa fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a th:href="@{/admin/tag}" class="nav-link">
+                                <i class="fa fa-tag nav-icon"></i>
+                                <p style="font-size: 15px">标签列表</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--comment评论管理-->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa fa-comment"></i>
+                        <p>
+                            评论管理
+                            <i class="fa fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a th:href="@{/admin/comment}" class="nav-link">
+                                <i class="fa fa-comment-o nav-icon"></i>
+                                <p style="font-size: 15px">评论列表</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--云盘图片管理-->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa fa-image"></i>
+                        <p>
+                            图片管理
+                            <i class="fa fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a th:href="@{/admin/image}" class="nav-link">
+                                <i class="fa fa-picture-o nav-icon"></i>
+                                <p style="font-size: 15px">图片列表</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--日志监控-->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa fa-list-alt"></i>
+                        <p>
+                            日志监控
+                            <i class="fa fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a th:href="@{/admin/log}" class="nav-link">
+                                <i class="fa fa-list-alt nav-icon"></i>
+                                <p style="font-size: 15px">日志记录</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a th:href="@{/admin/exception}" class="nav-link">
+                                <i class="fa fa-list-alt nav-icon"></i>
+                                <p style="font-size: 15px">异常记录</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a th:href="@{/admin/view}" class="nav-link">
+                                <i class="fa fa-list-alt nav-icon"></i>
+                                <p style="font-size: 15px">浏览记录</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--设置-->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa fa-gear"></i>
+                        <p>
+                            设置
+                            <i class="fa fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="fa fa-lock nav-icon"></i>
+                                <p style="font-size: 15px">修改信息</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:href="@{/admin/logout}" class="nav-link">
+                                <i class="fa fa-power-off nav-icon"></i>
+                                <p style="font-size: 15px">退出</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </nav>
+
+    </div>
+</aside>

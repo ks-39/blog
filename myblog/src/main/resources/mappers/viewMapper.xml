@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ks39.myblog.mapper.viewMapper">
+
+  <resultMap id="BaseResultMap" type="com.ks39.myblog.model.entity.view">
+    <id column="id" jdbcType="INTEGER" property="id"></id>
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="browser" jdbcType="VARCHAR" property="browser" />
+    <result column="system" jdbcType="VARCHAR" property="system" />
+
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time"></result>
+  </resultMap>
+
+  <!--1. addView-->
+  <insert id="addView">
+    insert into sys_view(id,ip,browser,`system`) values (null,#{ip},#{browser},#{system})
+  </insert>
+
+  <!--2. getViewsCount-->
+  <select id="getViewsCount" resultMap="BaseResultMap">
+    SELECT COUNT(*) AS count FROM sys_view
+  </select>
+
+  <!--3. getViews-->
+  <select id="getViews" resultMap="BaseResultMap">
+    SELECT * FROM sys_view
+  </select>
+
+  <!--4. 搜索view-->
+  <select id="searchView" resultMap="BaseResultMap">
+    SELECT *
+    FROM sys_view
+    WHERE create_time BETWEEN #{startTime} AND #{endTime}
+    ORDER BY create_time
+  </select>
+
+</mapper>

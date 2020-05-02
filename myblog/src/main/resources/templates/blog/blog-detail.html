@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--xmlns:th="http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd"-->
+
+<!--1. 引入headCss代码,页面标题为Home-->
+<head th:replace="blog/common-template/headCss::head('Blog | Details')"></head>
+
+<body>
+    <!--NPgre（不需要了）-->
+    <div class="pjax_loading"></div>
+    <div class="pjax_loading1"></div>
+
+    <!--2. 引入header代码-->
+    <header th:replace="blog/common-template/header::header"></header>
+
+    <!--3. 引入sidebar=menu代码-->
+    <div th:replace="blog/common-template/sidebar-menu" class="sidebar-menu"></div>
+
+    <!--4. 引入breadcrumb-area代码-->
+    <div th:replace="blog/common-template/breadcrumb-area"></div>
+
+    <!--5. 引入article-list和sidebar-info -->
+    <div id="main-area" th:each="config:${configs}">
+
+        <div class="post-two-area" th:if="${config.background_image} != '' "  th:style=" 'background: url(' + ${config.background_image} + ') no-repeat; background-size: cover; background-position: center; padding-top: 125px; padding-bottom: 0px; background-attachment: fixed;' ">
+            <div class="container">
+                <div class="row">
+
+                    <!--5. 引入article-list-->
+                    <div th:replace="blog/common-template/article-detail"></div>
+
+                    <!--6. 引入sidebar-info-->
+                    <div th:replace="blog/common-template/sidebar-info"></div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="post-two-area" th:if="${config.background_image} == '' "  style="background: url(/blog/MyPictures/background1.jpg) no-repeat; background-size: cover; background-position: center; padding-top: 125px; padding-bottom: 0px; background-attachment: fixed;">
+            <div class="container">
+                <div class="row">
+
+                    <!--5. 引入article-list-->
+                    <div th:replace="blog/common-template/article-detail"></div>
+
+                    <!--6. 引入sidebar-info-->
+                    <div th:replace="blog/common-template/sidebar-info"></div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!--6. 引入footer-->
+    <footer th:replace="blog/common-template/footer"></footer>
+
+</body>
+
+<!--7. 引入footerScript-->
+<th:block th:replace="blog/common-template/footScript"/>
+
+<!--8. 引入pjax-->
+<th:block th:replace="blog/common-template/pjax"/>
+
+
+</html>

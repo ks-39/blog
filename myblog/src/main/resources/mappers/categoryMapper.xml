@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ks39.myblog.mapper.categoryMapper">
+
+  <!--数据库字段与实体类对象对应-->
+  <resultMap id="BaseResultMap" type="com.ks39.myblog.model.entity.category">
+    <id column="category_id" jdbcType="INTEGER" property="category_id"></id>
+    <result column="category_name" jdbcType="VARCHAR" property="category_name" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+
+    <!--额外属性，统计该分类下的博客数量-->
+    <result column="count" jdbcType="INTEGER" property="count"></result>
+  </resultMap>
+
+<!--前端博客-->
+  <!--1. getCategories(获取categories公共资源)-->
+  <select id="getCategories" resultMap="BaseResultMap">
+    SELECT c.*,COUNT(b.blog_id) AS count
+    FROM tb_category c
+    LEFT JOIN tb_category_blog cb
+    ON c.category_id = cb.category_id
+    LEFT JOIN tb_blog b
+    ON cb.blog_id = b.blog_id
+    AND b.blog_status = 1
+    GROUP BY c.category_id
+  </select>
+
+  <!--2. getCategoryByCategoryId(回显categoryId分页页面的标头)-->
+  <select id="getCategoryByCategoryId" resultMap="BaseResultMap">
+    SELECT *
+    FROM tb_category
+    WHERE category_id = ${value};
+  </select>
+
+
+<!--后台管理-->
+<!--1. 统计分类数量-->
+  <select id="getCategoriesNumber" resultMap="BaseResultMap">
+    SELECT COUNT(*) AS count FROM tb_category
+  </select>
+
+<!--2. 添加分类-->
+  <insert id="addCategory">
+    insert into tb_category(
+    category_id,
+    category_name,
+    create_time,
+    update_time
+    )
+    values (
+    null,
+    #{category_name},
+    current_timestamp ,
+    current_timestamp
+    )
+  </insert>
+
+<!--3. 删除category-->
+  <delete id="deleteCategory">
+    delete from tb_category where category_id = #{category_id}
+  </delete>
+
+<!--4. 修改category-->
+  <update id="editCategory">
+    update tb_category
+    <trim prefix="set" suffixOverrides=",">
+      <if test="category_name != null">
+        category_name = #{category_name},
+      </if>
+    </trim>
+    where category_id = #{category_id}
+  </update>
+
+<!--5. 搜索category-->
+  <select id="searchCategory" resultMap="BaseResultMap">
+    select *
+    from tb_category
+    where category_name like CONCAT('%',#{value},'%')
+  </select>
+
+<!--6. 全部blog信息-->
+  <select id="getAllCategories" resultMap="BaseResultMap">
+    SELECT c.*,COUNT(b.blog_id) AS count
+    FROM tb_category c
+    LEFT JOIN tb_category_blog cb
+    ON c.category_id = cb.category_id
+    LEFT JOIN tb_blog b
+    ON cb.blog_id = b.blog_id
+    GROUP BY c.category_id
+  </select>
+</mapper>

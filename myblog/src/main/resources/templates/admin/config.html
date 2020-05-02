@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<!--导入thymeleaf-->
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--1. 引入headerCss-->
+<head th:replace="admin/common-template/headCss::head('Admin | Config')"></head>
+
+
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+  <!--2. 引入header代码-->
+  <nav th:replace="admin/common-template/header"></nav>
+
+  <!--3. 引入sidebar-menu-->
+  <aside th:replace="admin/common-template/sidebar-menu"></aside>
+
+  <!--4. 引入index-->
+  <div th:replace="admin/page-fragment/config"></div>
+
+  <aside class="control-sidebar control-sidebar-dark">
+  </aside>
+
+</div>
+
+<!--6. 引入footer-->
+<footer th:replace="admin/common-template/footer"></footer>
+
+<!--7. 引入footerScript-->
+<th:block th:replace="admin/common-template/footScript"/>
+
+<!--8. 引入pjax-->
+<th:block th:replace="admin/common-template/pjax"/>
+
+<!--pjax为null：执行该js-->
+<script type="text/javascript">
+
+  $("#submitConfig").click(function () {
+
+    //1. 校验评论表单数据是否符合
+    var boo = $("#configForm").data('bootstrapValidator').isValid();
+
+    if (boo) {
+      var url = "/admin/config/post";
+      var data = {
+        //左边为key，需要与实体类的对象名一致（如果使用了dto则需要与dto的相应属性名相对应，这样才能自动setter封装）
+        "head_title": $("[id='headTitle']").val(),
+        "head_subtitle": $("[id='headSubtitle']").val(),
+        "head_info": $("[id='headInfo']").val(),
+        "nick_name": $("[id='nickName']").val(),
+        "introduction": $("[id='introduction']").val(),
+        "footer_info": $("[id='footerInfo']").val(),
+        "background_image": $("[id='backgroundImage']").val(),
+        "avator": $("[id='avator']").val(),
+        "wechat_image": $("[id='wechatImage']").val(),
+      };
+      alert("修改成功");
+      $("#AdminContent").load(url,data);
+    }
+  });
+
+  $(document).ready(function() {
+    $('#configForm').bootstrapValidator({      //指定defaultForm表单进行校验
+      message: '无效信息',
+      fields: {
+
+        "head_title": {
+          message: '无效数据',
+          validators: {
+            notEmpty: {
+              alert: 'headTitle不能为空'
+            },
+            stringLength: {
+              min: 1,
+              max: 16,
+              message: '长度在1到16个字符之间'
+            }
+          },
+        },
+
+        "head_subtitle": {
+          message: '无效数据',
+          validators: {
+            notEmpty: {
+              alert: 'headSubtitle不能为空'
+            },
+            stringLength: {
+              min: 1,
+              max: 16,
+              message: '长度在1到16个字符之间'
+            }
+          }
+        },
+
+        "head_info": {
+          message: '无效数据',
+          validators: {
+            notEmpty: {
+              alert: 'headInfo不能为空'
+            },
+            stringLength: {
+              min: 1,
+              max: 32,
+              message: '长度在1到32个字符之间'
+            }
+          }
+        },
+
+        "nick_name": {
+          message: '无效数据',
+          validators: {
+            notEmpty: {
+              alert: 'nickName不能为空'
+            },
+            stringLength: {
+              min: 1,
+              max: 8,
+              message: '长度在1到8个字符之间'
+            }
+          }
+        },
+
+        "introduction": {
+          message: '无效数据',
+          validators: {
+            notEmpty: {
+              alert: 'introduction不能为空'
+            },
+            stringLength: {
+              min: 1,
+              max: 8,
+              message: '长度在1到8个字符之间'
+            }
+          }
+        },
+
+        "footer_info": {
+          message: '无效数据',
+          validators: {
+            notEmpty: {
+              alert: 'footerInfo不能为空'
+            },
+            stringLength: {
+              min: 1,
+              max: 32,
+              message: '长度在1到32个字符之间'
+            }
+          }
+        },
+
+        "wechat_image": {
+          message: '无效数据',
+          validators: {
+            notEmpty: {
+              alert: 'wechatImage不能为空'
+            },
+          }
+        },
+
+      },
+    });
+
+  });
+</script>
+
+
+</body>
+</html>

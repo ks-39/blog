@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!--导入thymeleaf-->
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--1. 引入headerCss-->
+<head th:replace="admin/common-template/headCss::head('Admin | Index')"></head>
+
+
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+  <!--2. 引入header代码-->
+  <nav th:replace="admin/common-template/header"></nav>
+
+  <!--3. 引入sidebar-menu-->
+  <aside th:replace="admin/common-template/sidebar-menu"></aside>
+
+  <!--4. 引入index-->
+  <div th:replace="admin/page-fragment/index"></div>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+
+</div>
+<!-- ./wrapper -->
+
+<!--6. 引入footer-->
+<footer th:replace="admin/common-template/footer"></footer>
+
+<!--7. 引入footerScript-->
+<th:block th:replace="admin/common-template/footScript"/>
+
+<!--8. 引入pjax-->
+<th:block th:replace="admin/common-template/pjax"/>
+
+</body>
+</html>

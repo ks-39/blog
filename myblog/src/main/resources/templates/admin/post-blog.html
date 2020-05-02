@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!--导入thymeleaf-->
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--1. 引入headerCss-->
+<head th:replace="admin/common-template/headCss::head('Admin | Post Blog')"></head>
+
+
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+    <!--2. 引入header代码-->
+    <nav th:replace="admin/common-template/header"></nav>
+
+    <!--3. 引入sidebar-menu-->
+    <aside th:replace="admin/common-template/sidebar-menu"></aside>
+
+    <!--4. 引入index-->
+    <div th:replace="admin/page-fragment/post-blog"></div>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+
+</div>
+<!-- ./wrapper -->
+
+<!--6. 引入footer-->
+<footer th:replace="admin/common-template/footer"></footer>
+
+<!--7. 引入footerScript-->
+<th:block th:replace="admin/common-template/footScript"/>
+
+<!--8. 引入pjax-->
+<th:block th:replace="admin/common-template/pjax"/>
+
+<!--pjax为null时调用这个js-->
+<script>
+
+    //回显数据
+    $(document).ready(function() {
+        $('[data-role="tags-input"]').tagsInput({
+            'interactive':true, //是否可以通过输入增加标签，总可以通过addTag函数增加标签
+        });
+    });
+
+    //初始化Markdown编辑器
+    var contentEditor;
+    $(function() {
+        contentEditor = editormd("md-content", {
+            width   : "100%",
+            height  : 800,
+            syncScrolling : "single",
+            path    : "/adminResources/js/plugins/editormd/lib/",
+        });
+    });
+
+    function set_published(blog_status){
+        //填入博客状态，如何进行submit提交
+        $("[name='blog_status']").val(blog_status);
+        alert("修改成功");
+        location.href="/admin/blog";
+
+    }
+
+    //初始化checkbox样式
+    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+        checkboxClass: 'icheckbox_flat-green',
+        radioClass   : 'iradio_flat-green'
+    })
+
+</script>
+
+</body>
+</html>

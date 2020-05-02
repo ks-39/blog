@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ks39.myblog.mapper.linkMapper">
+
+  <resultMap id="BaseResultMap" type="com.ks39.myblog.model.entity.link">
+    <id column="link_id" jdbcType="INTEGER" property="link_id"></id>
+    <result column="link_name" jdbcType="VARCHAR" property="link_name" />
+    <result column="link_url" jdbcType="VARCHAR" property="link_url" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+  </resultMap>
+
+  <!--1. getLinks(link公共资源)-->
+  <select id="getLinks" resultMap="BaseResultMap">
+    select * from tb_link
+  </select>
+
+  <!--2. 添加link-->
+  <insert id="addLink">
+    insert into tb_link(
+    link_id,
+    link_name,
+    link_url,
+    create_time,
+    update_time
+    )
+    values(
+    null,
+    #{link_name},
+    #{link_url},
+    current_timestamp ,
+    current_timestamp
+    )
+  </insert>
+
+<!--3. 删除link-->
+  <delete id="deleteLink">
+    delete from tb_link where link_id = #{link_id}
+  </delete>
+
+<!--4. 修改link-->
+  <update id="editLink">
+    update tb_link
+        <trim prefix="set" suffixOverrides=",">
+            <if test="link_name != null">
+              link_name = #{link_name},
+            </if>
+            <if test="link_url != null">
+              link_url = #{link_url}
+            </if>
+        </trim>
+    where link_id = #{link_id}
+  </update>
+
+<!--5. 搜索link-->
+  <select id="searchLink" resultMap="BaseResultMap">
+    select *
+    from tb_link
+    where link_name like CONCAT('%',#{value},'%')
+  </select>
+</mapper>

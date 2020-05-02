@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ks39.myblog.mapper.tagMapper">
+
+  <!--数据库字段与实体类对应Map-->
+  <resultMap id="BaseResultMap" type="com.ks39.myblog.model.entity.tag">
+    <id column="tag_id" jdbcType="INTEGER" property="tag_id"></id>
+    <result column="tag_name" jdbcType="VARCHAR" property="tag_name" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+
+    <!--额外属性：统计该tag下博客数量-->
+    <result column="count" jdbcType="INTEGER" property="count"></result>
+  </resultMap>
+
+  <!--1. getTags(获取tag公共资源)-->
+  <select id="getTags" resultMap="BaseResultMap">
+    SELECT t.*,COUNT(b.blog_id) AS count
+    FROM tb_tag t
+    LEFT JOIN tb_tag_blog tb
+    ON t.tag_id = tb.tag_id
+    LEFT JOIN tb_blog b
+    ON tb.blog_id = b.blog_id
+    AND b.blog_status = 1
+    GROUP BY t.tag_id
+  </select>
+
+<!--2. getTagByTagId(回显tagId分页页面下的标签标头)-->
+  <select id="getTagByTagId" resultMap="BaseResultMap">
+    SELECT *
+    FROM tb_tag
+    WHERE tag_id = #{value};
+  </select>
+
+<!--3. getTagListByBlogId(回显博客内容页下的tagList)-->
+  <select id="getTagListByBlogId" resultMap="BaseResultMap">
+    SELECT t.tag_id,t.tag_name
+    FROM tb_tag_blog tb,tb_tag t
+    WHERE tb.blog_id = #{value}
+    AND tb.tag_id = t.tag_id
+  </select>
+
+
+<!--后台管理-->
+<!--1. 统计标签数量-->
+  <select id="getTagsNumber" resultMap="BaseResultMap">
+    SELECT COUNT(*) AS count FROM tb_tag
+  </select>
+
+<!--2. 添加标签-->
+  <insert id="addTag">
+    insert into tb_tag(
+    tag_id,
+    tag_name,
+    create_time,
+    update_time
+    )
+    values (
+    null,
+    #{tag_name},
+    current_timestamp ,
+    current_timestamp
+    )
+  </insert>
+
+<!--3. 删除tag-->
+  <delete id="deleteTag">
+    delete from tb_tag where tag_id = #{tag_id}
+  </delete>
+
+<!--4. 修改tag-->
+  <update id="editTag">
+    update tb_tag
+    <trim prefix="set" suffixOverrides=",">
+      <if test="tag_name != null">
+        tag_name = #{tag_name},
+      </if>
+    </trim>
+    where tag_id = #{tag_id}
+  </update>
+
+<!--5. 搜索tag-->
+  <select id="searchTag" resultMap="BaseResultMap">
+    select *
+    from tb_tag
+    where tag_name like CONCAT('%',#{value},'%')
+  </select>
+
+<!--6. 添加TagList-->
+  <insert id="saveList" parameterType="list">
+    insert into tb_tag (tag_name,update_time) values
+    <foreach collection="list" item="item" index= "index" separator =",">
+    <if test="item.tag_name != ''">
+      (#{item.tag_name},current_timestamp )
+    </if>
+    </foreach>
+  </insert>
+
+<!--7. 再获取tagIds-->
+  <select id="getTagsId" resultType="integer">
+    select tag_id from tb_tag where tag_name in
+    <foreach collection="array" open="(" close=")"  item="item" separator=",">
+      #{item.tag_name}
+    </foreach>
+  </select>
+
+
+<!--8. getAllTags()-->
+  <select id="getAllTags" resultMap="BaseResultMap">
+    SELECT t.*,COUNT(b.blog_id) AS count
+    FROM tb_tag t
+    LEFT JOIN tb_tag_blog tb
+    ON t.tag_id = tb.tag_id
+    LEFT JOIN tb_blog b
+    ON tb.blog_id = b.blog_id
+    GROUP BY t.tag_id
+  </select>
+</mapper>

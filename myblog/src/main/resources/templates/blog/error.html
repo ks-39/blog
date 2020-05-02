@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--xmlns:th="http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd"-->
+
+<!--1. 引入headCss代码,页面标题为Home-->
+<head th:replace="blog/common-template/headCss::head('Blog | Error')"></head>
+<!--End-->
+
+<body>
+<!--NPgre-->
+<div class="pjax_loading"></div>
+<div class="pjax_loading1"></div>
+
+<!--&lt;!&ndash;2. 引入header代码&ndash;&gt;-->
+<!--<header th:replace="/blog/common-template/header::header"></header>-->
+
+<!--&lt;!&ndash;3. 引入sidebar=menu代码&ndash;&gt;-->
+<!--<div th:replace="/blog/common-template/sidebar-menu" class="sidebar-menu"></div>-->
+
+<!--4. 引入breadcrumb-area代码-->
+<div id="breadcrumb-area">
+    <!--如果后台没有设置背景图片，则使用默认的背景图片-->
+    <div class="breadcrumb-area" style="background: url(http://q956h1atc.bkt.clouddn.com/205524-1566651324f88b.jpg) no-repeat; background-size: cover; background-position: center; padding-top: 283px; padding-bottom: 0px; background-attachment: fixed;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3" style="margin-top: 50px;background-color: rgba(185,227,243,0.3)">
+
+                    <div class="banner-content" style="margin-bottom: 25px">
+
+                        <!--head_title-->
+                        <div class="banner-title white">
+                            <h1>Lost In Tokyo......</h1>
+                        </div>
+                        <!--head_title-->
+
+                        <!--head_subtitle-->
+                        <div class="banner-subtitle white ">
+                            <h3 th:text="${ErrorMsg}"></h3>
+                        </div>
+                        <!--head_subtitle-->
+
+                        <!--head_info-->
+                        <div class="banner-info white">
+                            <a th:href="@{/}">返回首页</a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<!--7. 引入footerScript-->
+<th:block th:replace="blog/common-template/footScript"/>
+
+<!--8. 引入pjax-->
+<th:block th:replace="blog/common-template/pjax"/>
+
+</html>

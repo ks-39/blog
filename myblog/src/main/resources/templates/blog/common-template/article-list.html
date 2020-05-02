@@ -1,0 +1,145 @@
+<div id="BlogContent" class="col-lg-8"  style="background-color: rgba(185,227,243,0.8)">
+    <div class="post-list">
+
+        <!--先判断是否有博客-->
+        <div th:if="${blogList.list} != null or ${#arrays.length(blogList.list)} != 0">
+            <!--判断是否含有分类信息-->
+            <h2 th:if="${category_id}!=null" >分类: <span  th:text="${category_name}"></span> </h2>
+            <!--判断是否含有标签信息-->
+            <h2 th:if="${tag_id}!=null" >标签: <span th:text="${tag_name}"></span> </h2>
+        </div>
+
+        <hr>
+
+        <!--如果blogPage出错（超出页数）-->
+        <!--tag标签下blogPage出错（超出页数）-->
+        <!--category下blogPage出错（超出页数）-->
+        <div th:if="${blogList.list} == null or ${#arrays.length(blogList.list)} == 0">
+            <h2>正在探索未知领域！！<br></h2>
+        </div>
+
+        <!--有就遍历articleList   -->
+        <div th:each="blog,i: ${blogList.list}" class="single-post">
+
+            <div class="inner-post">
+                <div class="post-img">
+                    <a th:href="@{/blog(blogId=${blog.blog_id})}">
+                        <img th:src="@{${blog.blog_cover}}" alt="blog">
+                    </a>
+                </div>
+
+                <div class="post-info">
+                    <!--博客title-->
+                    <div class="post-title">
+                        <h3>
+                            <a th:href="@{/blog(blogId=${blog.blog_id})}" th:text="${blog.blog_title}">
+                            </a>
+                        </h3>
+                    </div>
+                    <!--博客简介-->
+                    <div class="post-content">
+                        <a th:href="@{/blog(blogId=${blog.blog_id})}">
+                            <p th:text="${blog.blog_description}"></p>
+                        </a>
+                    </div>
+
+                    <div class="blog-meta fix" >
+                        <div class="meta-left pull-left">
+                            <ul>
+                                <!--index页面-->
+                                <li>
+                                    <span class="flaticon-comment-black-oval-bubble-shape tag"></span>
+                                    <p>
+                                        <a  th:href="@{/category(categoryId=${blog.category_id})}" th:text="${blog.category_name}"></a>
+                                    </p>
+                                </li>
+
+                                <!--博客最后更新时间-->
+                                <li> <span class="flaticon-calendar clendar"></span>
+                                    <p th:text="${#dates.format(blog.update_time,'yyyy-MM-dd &nbsp;&nbsp;HH:mm')}"></p>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!--进入博客页-->
+                        <div class="post-readmore pull-right">
+                            <a th:href="@{/blog(blogId=${blog.blog_id})}" class="readmore-btn">Read More <span>+</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--博客序号-->
+            <div class="post-date one">
+                <span th:text="${i.count}"></span>
+            </div>
+
+        </div>
+
+        <!--分页：根据pagehelper插件参数来设置-->
+        <!--先判断页数是否大于1-->
+        <div class="pagination-area" th:if="${blogList.pages} > 1">
+            <div class="pagination" style="text-align: center">
+                <ul>
+                    <!--有前一页的情况（下一页按钮） class="prev" 请求参数articlePage为pagehelper的prePage参数-->
+                    <li th:if="${blogList.hasPreviousPage}" class="prev pull-left" style="width: 120px">
+                        <!--如果categoryId == null 并且 tagId == null，表明当前页面为首页，请求href为"/"，请求参数articlePage为prePage，获取前一页的博客数据   -->
+                        <a th:if="${category_id}==null and ${tag_id}==null" th:href="@{/(blogPage=${blogList.prePage})}" href="#">PRev</a>
+                        <!--如果categoryId != null，表明在category页面下，请求href为"/category"，请求参数articlePage为prePage，categoryId为的url的categoryId，获取该categoryId下前一页的博客-->
+                        <a th:if="${category_id}!=null" th:href="@{/category(categoryId=${category_id},blogPage=${blogList.prePage})}" href="#">PRev</a>
+                        <!--如果tagId != null，表明在tag页面下，请求href为"/tag"，请求参数articlePage为前一页，tagId为url的tagId，获取该tagId下前一页的博客-->
+                        <a th:if="${tag_id}!=null" th:href="@{/tag(tagId=${tag_id},blogPage=${blogList.prePage})}" href="#">PRev</a>
+
+                    </li>
+
+
+                    <!--当前分页条的第一个页数不等于1时（First按钮） class="page" 请求参数articlePage为第一页-->
+                    <li th:if="${blogList.navigateFirstPage} != 1 " class="page">
+                        <!--如果categoryId == null 并且 tagId == null，表明当前页面为首页，请求href为"/"，请求参数articlePage为1，获取第一页的博客数据   -->
+                        <a th:if="${category_id}==null and ${tag_id}==null" th:href="@{/(blogPage=1)}" href="#" >First</a>
+                        <!--如果categoryId != null，表明在category页面下，请求href为"/category"，请求参数articlePage为1，categoryId为的url的categoryId，获取该categoryId下第一页的博客-->
+                        <a th:if="${category_id}!=null" th:href="@{/category(categoryId=${category_id},blogPage=1)}" href="#" >First</a>
+                        <!--如果tagId != null，表明在tag页面下，请求href为"/tag"，请求参数articlePage为1，tagId为url的tagId，获取该tagId下第一页的博客-->
+                        <a th:if="${tag_id}!=null" th:href="@{/tag(tagId=${tag_id},blogPage=1)}" href="#" >First</a>
+                    </li>
+
+
+                    <!--当当前页为pageNum（当前页）时（激活页按钮），class = "page active"-->
+                    <li th:each="page:${blogList.navigatepageNums}"
+                        class="page" th:classappend="${page}==${blogList.pageNum}?'active'">
+                        <!--如果categoryId == null 并且 tagId == null，表明当前页面为首页，请求href为"/"，请求参数articlePage为page（当前），获取当前页的博客数据   -->
+                        <a th:if="${category_id}==null and ${tag_id}==null" th:href="@{/(blogPage=${page})}" th:text="${page}" href="#"></a>
+                        <!--如果categoryId != null，表明在category页面下，请求href为"/category"，请求参数articlePage为page（当前页），categoryId为的url的categoryId，获取该categoryId下当前页的博客-->
+                        <a th:if="${category_id}!=null" th:href="@{/category(categoryId=${category_id},blogPage=${page})}" th:text="${page}" href="#"></a>
+                        <!--如果tagId != null，表明在tag页面下，请求href为"/tag"，请求参数articlePage为page（当前页），tagId为url的tagId，获取该tagId下当前页的博客-->
+                        <a th:if="${tag_id}!=null" th:href="@{/tag(tagId=${tag_id},blogPage=${page})}" th:text="${page}" href="#"></a>
+                    </li>
+
+
+                    <!--当前导航条的最后一页页码部位最后一个页码（navigateLastPage）时(Last按钮)，class="page" -->
+                    <li th:if="${blogList.navigateLastPage} < ${blogList.pages}" class="page">
+                        <!--如果categoryId == null 并且 tagId == null，表明当前页面为首页，请求href为"/"，请求参数articlePage为pages（最后一页），获取最后一页的博客数据   -->
+                        <a th:if="${category_id}==null and ${tag_id}==null" th:href="@{/(blogPage=${blogList.pages})}" href="#">Last</a>
+                        <!--如果categoryId != null，表明在category页面下，请求href为"/category"，请求参数articlePage为pages（最后页），categoryId为的url的categoryId，获取该categoryId下最后一页的博客-->
+                        <a th:if="${category_id}!=null" th:href="@{/category(categoryId=${category_id},blogPage=${blogList.pages})}" href="#">Last</a>
+                        <!--如果tagId != null，表明在tag页面下，请求href为"/tag"，请求参数articlePage为pages（最后一页），tagId为url的tagId，获取该tagId下最后一页的博客-->
+                        <a th:if="${tag_id}!=null" th:href="@{/tag(tagId=${tag_id},blogPage=${blogList.pages})}" href="#">Last</a>
+                    </li>
+
+
+                    <!--如果有下一页（next按钮）class="next pull-right"(放在右边)-->
+                    <li th:if="${blogList.hasNextPage}" class="next pull-right">
+                        <!--如果categoryId == null 并且 tagId == null，表明当前页面为首页，请求href为"/"，请求参数articlePage为nextPage（下一页），获取下一页的博客数据   -->
+                        <a th:if="${category_id}==null and ${tag_id}==null" th:href="@{/(blogPage=${blogList.nextPage})}" href="#">Next</a>
+                        <!--如果categoryId != null，表明在category页面下，请求href为"/category"，请求参数articlePage为nextPage（下一页），categoryId为的url的categoryId，获取该categoryId的下一页的博客-->
+                        <a th:if="${category_id}!=null" th:href="@{/category(categoryId=${category_id},blogPage=${blogList.nextPage})}" href="#">Next</a>
+                        <!--如果tagId != null，表明在tag页面下，请求href为"/tag"，请求参数articlePage为nextPage（下一页），tagId为url的tagId，获取该tagId的下一页的博客-->
+                        <a th:if="${tag_id}!=null" th:href="@{/tag(tagId=${tag_id},blogPage=${blogList.nextPage})}" href="#">Next</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>

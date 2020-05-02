@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--导入thymeleaf-->
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--1. 引入headerCss-->
+<head th:replace="admin/common-template/headCss::head('Admin | Login')"></head>
+
+<body class="hold-transition login-page" style="background: url(http://q956h1atc.bkt.clouddn.com/wallhaven-yjq3ox.jpg)">
+<div class="login-box" style="background: rgba(237,240,236,0.4)">
+    <div class="login-logo">
+        <a href="../../index2.html"><b>Admin</b>System</a>
+    </div>
+    <!-- /.login-logo -->
+    <div class="card"  style="background: rgba(237,240,236,0.4)">
+        <div class="card-body login-card-body">
+            <p class="login-box-msg">Welcome</p>
+
+            <form th:action="@{/admin/login}" method="post">
+
+                <div class="form-group has-feedback">
+                    <input name="username" type="text" class="form-control" placeholder="Username" required>
+                    <span class="fa fa-user form-control-feedback"></span>
+                </div>
+
+                <div class="form-group has-feedback">
+                    <input name="password" type="password" class="form-control" placeholder="Password" required>
+                    <span class="fa fa-lock form-control-feedback"></span>
+                </div>
+
+                <!--后台返回的登录错误信息-->
+                <span th:text="${LoginMsg}" style="color: red"></span><br>
+
+                <div class="row">
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<!--7. 引入footerScript-->
+<th:block th:replace="admin/common-template/footScript"/>
+
+</body>
+</html>

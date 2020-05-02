@@ -1,0 +1,324 @@
+<!--局部刷新,需要将js代码也加载,所以需要xmlns -->
+<div id="AdminContent" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+    <div class="content-wrapper">
+
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+
+                </div>
+            </div>
+        </div>
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+
+                        <!-- Input addon -->
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <h3 class="card-title">个性化设置</h3>
+                            </div>
+
+                            <div class="card-body" id="config">
+
+                                <form th:each="config:${configs}" id="configForm">
+
+                                    <!--head_title-->
+                                    <label for="headTitle">博客head_title(16字以内)：</label>
+                                    <!--bootstrap验证需要:
+                                    1. div class="form-group"
+                                    2. input class="form-control"
+                                    -->
+                                    <div class="form-group">
+                                        <p style="font-size: 15px" th:text="head_title当前属性：+${config.head_title}"></p>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-th-large"></i>
+                                            </span>
+                                            </div>
+                                            <input name="head_title" id="headTitle" type="text" class="form-control" th:placeholder="'当前属性为：'+${config.head_title}" maxlength="16">
+                                        </div>
+                                    </div>
+                                    <hr>
+
+                                    <!--head_subtitle-->
+                                    <label for="headSubtitle">博客head_subtitle(16字以内)：</label>
+                                    <div class="form-group">
+                                        <p style="font-size: 15px" th:text="head_subtitle当前属性：+${config.head_subtitle}"></p>
+
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-th-list"></i>
+                                            </span>
+                                            </div>
+                                            <input name="head_subtitle" required="required" id="headSubtitle" type="text" class="form-control" th:placeholder="'当前属性为：'+${config.head_subtitle}" maxlength="16">
+                                        </div>
+                                    </div>
+                                    <hr>
+
+                                    <!--head_info-->
+                                    <label for="headInfo">博客head_info(32字以内)：</label>
+                                    <div class="form-group">
+                                        <p style="font-size: 15px" th:text="head_info当前属性：+${config.head_info}"></p>
+
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-th"></i>
+                                            </span>
+                                            </div>
+                                            <input name="head_info" id="headInfo" type="text" class="form-control" th:placeholder="'当前属性为：'+${config.head_info}" maxlength="32">
+                                        </div>
+                                    </div>
+                                    <hr>
+
+                                    <!--nick_name-->
+                                    <label for="nickName">昵称(8字以内)：</label>
+                                    <div class="form-group">
+                                        <p style="font-size: 15px" th:text="昵称当前属性：+${config.nick_name}"></p>
+
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-user"></i>
+                                            </span>
+                                            </div>
+                                            <input name="nick_name" id="nickName" type="text" class="form-control" th:placeholder="'当前属性为：'+${config.nick_name}" maxlength="8">
+                                        </div>
+                                    </div>
+                                    <hr>
+
+                                    <!--introduction-->
+                                    <label for="introduction">个人简介(32字以内)：</label>
+                                    <div class="form-group">
+                                        <p style="font-size: 15px" th:text="个人简介当前属性：+${config.introduction}"></p>
+
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-pencil"></i>
+                                            </span>
+                                            </div>
+                                            <input name="introduction" id="introduction" type="text" class="form-control" th:placeholder="'当前属性为：'+${config.introduction}" maxlength="32">
+                                        </div>
+                                    </div>
+                                    <hr>
+
+                                    <!--footer_info-->
+                                    <label for="footerInfo">博客footer_info(32字以内)：</label>
+                                    <div class="form-group">
+                                        <p style="font-size: 15px" th:text="footer_info当前属性：+${config.footer_info}"></p>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-list"></i>
+                                            </span>
+                                            </div>
+                                            <input name="footer_info" id="footerInfo" type="text" class="form-control" th:placeholder="'当前属性为：'+${config.footer_info}" maxlength="32">
+                                        </div>
+                                    </div>
+                                    <hr>
+
+                                    <!--background-->
+                                    <label for="backgroundImage">博客背景图片URL(本地图片需先上传到云盘，再复制其URL)：</label>
+                                    <div class="form-group">
+                                        <p style="font-size: 15px" th:text="背景图片当前属性：+${config.background_image}"></p>
+
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-image"></i>
+                                            </span>
+                                            </div>
+                                            <input name="background_image" id="backgroundImage" type="text" class="form-control" th:placeholder="'当前属性为：'+${config.background_image}">
+                                        </div>
+                                    </div>
+                                    <hr>
+
+                                    <!--avator-->
+                                    <label for="avator">头像URL(本地图片需先上传到云盘，再复制其URL)：</label>
+                                    <div class="form-group">
+                                        <p style="font-size: 15px" th:text="头像当前属性：+${config.avator}"></p>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-image"></i>
+                                            </span>
+                                            </div>
+                                            <input name="avator" id="avator" type="text" class="form-control" th:placeholder="'当前属性为：'+${config.avator}">
+                                        </div>
+                                    </div>
+                                    <hr>
+
+                                    <!--wechat_image-->
+                                    <label for="wechatImage">微信二维码(本地图片需先上传到云盘，再复制其URL)：</label>
+                                    <div class="form-group">
+                                        <p style="font-size: 15px" th:text="微信二维码当前属性：+${config.wechat_image}"></p>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-image"></i>
+                                            </span>
+                                            </div>
+                                            <input name="wechat_image" id="wechatImage" type="text" class="form-control" th:placeholder="'当前属性为：'+${config.wechat_image}">
+                                        </div>
+                                    </div>
+
+                                    <div class="card-footer">
+                                        <button type="button" class="btn btn-info" id="submitConfig">Submit</button>
+                                    </div>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--pjax为true：执行该js代码-->
+        <script type="text/javascript">
+            $("#submitConfig").click(function () {
+                //1. 校验评论表单数据是否符合
+                var boo = $("#configForm").data('bootstrapValidator').isValid();
+                if (boo) {
+                    var url = "/admin/config/post";
+                    var data = {
+                        //左边为key，需要与实体类的对象名一致（如果使用了dto则需要与dto的相应属性名相对应，这样才能自动setter封装）
+                        "head_title": $("[id='headTitle']").val(),
+                        "head_subtitle": $("[id='headSubtitle']").val(),
+                        "head_info": $("[id='headInfo']").val(),
+                        "nick_name": $("[id='nickName']").val(),
+                        "introduction": $("[id='introduction']").val(),
+                        "footer_info": $("[id='footerInfo']").val(),
+                        "background_image": $("[id='backgroundImage']").val(),
+                        "avator": $("[id='avator']").val(),
+                        "wechat_image": $("[id='wechatImage']").val(),
+                    };
+                    alert("修改成功");
+                    $("#AdminContent").load(url,data);
+                }
+            });
+
+            //自定义bootstrap校验
+            $(document).ready(function() {
+                $('#configForm').bootstrapValidator({      //指定defaultForm表单进行校验
+                    message: '无效信息',
+                    fields: {
+
+                        "head_title": {
+                            message: '无效数据',
+                            validators: {
+                                notEmpty: {
+                                    alert: 'headTitle不能为空'
+                                },
+                                stringLength: {
+                                    min: 1,
+                                    max: 16,
+                                    message: '长度在1到16个字符之间'
+                                }
+                            },
+                        },
+
+                        "head_subtitle": {
+                            message: '无效数据',
+                            validators: {
+                                notEmpty: {
+                                    alert: 'headSubtitle不能为空'
+                                },
+                                stringLength: {
+                                    min: 1,
+                                    max: 16,
+                                    message: '长度在1到16个字符之间'
+                                }
+                            }
+                        },
+
+                        "head_info": {
+                            message: '无效数据',
+                            validators: {
+                                notEmpty: {
+                                    alert: 'headInfo不能为空'
+                                },
+                                stringLength: {
+                                    min: 1,
+                                    max: 32,
+                                    message: '长度在1到32个字符之间'
+                                }
+                            }
+                        },
+
+                        "nick_name": {
+                            message: '无效数据',
+                            validators: {
+                                notEmpty: {
+                                    alert: 'nickName不能为空'
+                                },
+                                stringLength: {
+                                    min: 1,
+                                    max: 8,
+                                    message: '长度在1到8个字符之间'
+                                }
+                            }
+                        },
+
+                        "introduction": {
+                            message: '无效数据',
+                            validators: {
+                                notEmpty: {
+                                    alert: 'introduction不能为空'
+                                },
+                                stringLength: {
+                                    min: 1,
+                                    max: 8,
+                                    message: '长度在1到8个字符之间'
+                                }
+                            }
+                        },
+
+                        "footer_info": {
+                            message: '无效数据',
+                            validators: {
+                                notEmpty: {
+                                    alert: 'footerInfo不能为空'
+                                },
+                                stringLength: {
+                                    min: 1,
+                                    max: 32,
+                                    message: '长度在1到32个字符之间'
+                                }
+                            }
+                        },
+
+                        "wechat_image": {
+                            message: '无效数据',
+                            validators: {
+                                notEmpty: {
+                                    alert: 'wechatImage不能为空'
+                                },
+                            }
+                        },
+
+                    },
+                });
+
+            });
+        </script>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+

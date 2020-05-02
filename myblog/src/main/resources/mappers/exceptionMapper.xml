@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ks39.myblog.mapper.exceptionMapper">
+
+  <resultMap id="BaseResultMap" type="com.ks39.myblog.model.entity.exception">
+    <id column="id" jdbcType="INTEGER" property="id"></id>
+    <result column="exception_code" jdbcType="VARCHAR" property="exception_code" />
+    <result column="exception_message" jdbcType="VARCHAR" property="exception_message" />
+    <result column="create_time" jdbcType="VARCHAR" property="create_time" />
+
+    <result column="count" jdbcType="INTEGER" property="count"></result>
+  </resultMap>
+
+  <!--1. addException-->
+  <insert id="addException">
+    insert into sys_exception(
+    id,
+    exception_code,
+    exception_message,
+    create_time)
+    values (
+    null,
+    #{exception_code},
+    #{exception_message},
+    current_timestamp
+    )
+  </insert>
+
+  <!--2. getExceptions-->
+  <select id="getExceptionsCount" resultMap="BaseResultMap">
+    SELECT COUNT(*) AS count FROM sys_exception
+  </select>
+
+<!--3. getExceptions-->
+  <select id="getExceptions" resultMap="BaseResultMap">
+    select * from sys_exception
+  </select>
+
+<!--4. searchException-->
+  <select id="searchException" resultMap="BaseResultMap">
+    SELECT *
+    FROM sys_exception
+    WHERE create_time BETWEEN #{startTime} AND #{endTime}
+    ORDER BY create_time
+  </select>
+</mapper>

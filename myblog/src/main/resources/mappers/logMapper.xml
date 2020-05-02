@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ks39.myblog.mapper.logMapper">
+
+  <resultMap id="BaseResultMap" type="com.ks39.myblog.model.entity.log">
+    <id column="id" jdbcType="INTEGER" property="id"></id>
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+
+    <result column="HTTP_URL" jdbcType="VARCHAR" property="HTTP_URL" />
+    <result column="HTTP_TYPE" jdbcType="VARCHAR" property="HTTP_TYPE" />
+    <result column="CLASS_METHOD" jdbcType="VARCHAR" property="CLASS_METHOD" />
+    <result column="CLASS_METHOD_ARGS" jdbcType="VARCHAR" property="CLASS_METHOD_ARGS" />
+    <result column="METHOD_RESPONSE" jdbcType="VARCHAR" property="METHOD_RESPONSE" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+
+  </resultMap>
+
+  <!--1. addLog-->
+  <insert id="addLog">
+    insert into sys_log(
+    id,
+    ip,
+    HTTP_URL,
+    HTTP_TYPE,
+    CLASS_METHOD,
+    CLASS_METHOD_ARGS,
+    METHOD_RESPONSE,
+    create_time
+    )
+    values (
+    null,
+    #{ip},
+    #{HTTP_URL},
+    #{HTTP_TYPE},
+    #{CLASS_METHOD},
+    #{CLASS_METHOD_ARGS},
+    #{METHOD_RESPONSE},
+    current_timestamp
+    )
+  </insert>
+
+<!--2. getLogs-->
+  <select id="getLogs" resultMap="BaseResultMap">
+    select * from sys_log
+  </select>
+
+<!--3. searchLog-->
+  <select id="searchLog" resultMap="BaseResultMap">
+    select *
+    from sys_log
+    where create_time between #{startTime} and #{endTime}
+    order by create_time
+  </select>
+</mapper>

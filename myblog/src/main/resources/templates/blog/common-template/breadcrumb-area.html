@@ -1,0 +1,126 @@
+<div id="breadcrumb-area" th:each="config:${configs}">
+    <!--如果后台设置了背景图片，则对其数据库中的背景图片url-->
+    <div  th:if="${config.background_image} != '' " class="breadcrumb-area" th:style=" 'background: url(' + ${config.background_image} + ') no-repeat; background-size: cover; background-position: center; padding-top: 283px; padding-bottom: 0px; background-attachment: fixed;' ">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3" style="margin-top: 50px;background-color: rgba(185,227,243,0.3)">
+
+                    <div class="banner-content" th:each="config:${configs}" style="margin-bottom: 25px">
+
+                        <!--head_title-->
+                        <div th:if="${config.head_title} == null " class="banner-title white">
+                            <h1>k$-39 | Blog</h1>
+                        </div>
+
+                        <div th:if="${config.head_title} != null" class="banner-title white">
+                            <h1 style="word-wrap: break-word" th:text="${config.head_title}"></h1>
+                        </div>
+                        <!--								head_title-->
+
+
+                        <!--								head_subtitle-->
+                        <div th:if="${config.head_subtitle} == null" class="banner-subtitle white ">
+                            <h4>激励自己长期做笔记以及整理笔记</h4>
+                        </div>
+
+                        <div th:if="${config.head_subtitle} != null" class="banner-info">
+                            <h4 style="word-wrap: break-word;" th:text="${config.head_subtitle}"></h4>
+                        </div>
+                        <!--								head_subtitle-->
+
+
+                        <!--								head_info-->
+                        <div th:if="${config.head_info} == null" class="banner-info white">
+                            <p>没有人能一开始就做好一件事</p>
+                        </div>
+
+                        <div th:if="${config.head_info} != null" class="banner-info white">
+                            <p style="word-wrap: break-word" th:text="${config.head_info}"></p>
+                        </div>
+                        <!--								head_info-->
+
+
+                        <!--								social-media link-->
+                        <div class="social-media" style="margin-top: 25px">
+                            <ul>
+                                <li th:each="link:${links}">
+                                    <a th:href="${link.link_url}" target="_blank">
+
+                                        <i th:if="${link.link_name} == 'GitHub' " class="fa fa-github" ></i>
+                                        <i th:if="${link.link_name} == 'Weibo' " class="fa fa-weibo"></i>
+                                        <i th:if="${link.link_name} == 'BiliBili' " class="fa fa-bold"></i>
+                                        <i th:if="${link.link_name} == 'Twitter' " class="fa fa-twitter"></i>
+                                        <i th:if="${link.link_name} == 'Instagram' " class="fa fa-instagram"></i>
+
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--如果后台没有设置背景图片，则使用默认的背景图片-->
+    <div  th:if="${config.background_image} == ''" class="breadcrumb-area" style="background: url(http://q956h1atc.bkt.clouddn.com/205524-1566651324f88b.jpg) no-repeat; background-size: cover; background-position: center; padding-top: 283px; padding-bottom: 0px; background-attachment: fixed;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3" style="margin-top: 50px;background-color: rgba(185,227,243,0.3)">
+
+                    <div class="banner-content" th:each="config:${configs}" style="margin-bottom: 25px">
+
+                        <!--								head_title-->
+                        <div th:if="${config.head_title} == null " class="banner-title white">
+                            <h1>k$-39 | Blog</h1>
+                        </div>
+
+                        <div th:if="${config.head_title} != null" class="banner-title white">
+                            <h1 style="word-wrap: break-word" th:text="${config.head_title}"></h1>
+                        </div>
+                        <!--								head_title-->
+
+                        <!--								head_subtitle-->
+                        <div th:if="${config.head_subtitle} == null" class="banner-subtitle white ">
+                            <h4>激励自己长期做笔记以及整理笔记</h4>
+                        </div>
+
+                        <div th:if="${config.head_subtitle} != null" class="banner-info">
+                            <h4 style="word-wrap: break-word;" th:text="${config.head_subtitle}"></h4>
+                        </div>
+                        <!--								head_subtitle-->
+
+                        <!--								head_info-->
+                        <div th:if="${config.head_info} == null" class="banner-info white">
+                            <p>没有人能一开始就做好一件事</p>
+                        </div>
+
+                        <div th:if="${config.head_info} != null" class="banner-info white">
+                            <p style="word-wrap: break-word" th:text="${config.head_info}"></p>
+                        </div>
+                        <!--								head_info-->
+
+                        <!--								social-media link-->
+                        <div class="social-media" style="margin-top: 25px">
+                            <ul>
+                                <li th:each="link:${links}">
+                                    <a th:href="${link.link_url}" target="_blank">
+
+                                        <i th:if="${link.link_name} == 'GitHub' " class="fa fa-github" ></i>
+                                        <i th:if="${link.link_name} == 'Weibo' " class="fa fa-weibo"></i>
+                                        <i th:if="${link.link_name} == 'BiliBili' " class="fa fa-bold"></i>
+                                        <i th:if="${link.link_name} == 'Twitter' " class="fa fa-twitter"></i>
+                                        <i th:if="${link.link_name} == 'Instagram' " class="fa fa-instagram"></i>
+
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

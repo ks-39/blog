@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ks39.myblog.mapper.configMapper">
+
+  <resultMap id="BaseResultMap" type="com.ks39.myblog.model.entity.config">
+    <result column="background_image" jdbcType="VARCHAR" property="background_image" />
+    <result column="head_title" jdbcType="VARCHAR" property="head_title" />
+    <result column="head_subtitle" jdbcType="VARCHAR" property="head_subtitle" />
+    <result column="head_info" jdbcType="VARCHAR" property="head_info" />
+    <result column="avator" jdbcType="VARCHAR" property="avator" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nick_name" />
+    <result column="introduction" jdbcType="VARCHAR" property="introduction" />
+    <result column="wechat_image" jdbcType="VARCHAR" property="wechat_image" />
+    <result column="footer_info" jdbcType="VARCHAR" property="footer_info" />
+  </resultMap>
+
+<!--1. getConfigs(config公共资源)-->
+  <select id="getConfigs" resultMap="BaseResultMap">
+    select * from tb_config
+  </select>
+
+<!--2. updateConfig-->
+  <update id="updateConfig">
+    update tb_config
+    <trim prefix="set" suffixOverrides=",">
+      <if test="background_image != null">
+        background_image = #{background_image},
+      </if>
+      <if test="head_title != null">
+        head_title = #{head_title},
+      </if>
+      <if test="head_subtitle != null">
+        head_subtitle = #{head_subtitle},
+      </if>
+      <if test="head_info != null">
+        head_info = #{head_info},
+      </if>
+      <if test="avator != null">
+        avator = #{avator},
+      </if>
+      <if test="nick_name != null">
+        nick_name = #{nick_name},
+      </if>
+      <if test="introduction != null">
+        introduction = #{introduction},
+      </if>
+      <if test="wechat_image != null">
+        wechat_image = #{wechat_image},
+      </if>
+      <if test="footer_info != null">
+        footer_info = #{footer_info},
+      </if>
+    </trim>
+  </update>
+</mapper>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ks39.myblog.mapper.blogMapper">
+
+  <!--数据库字段与实体类属性对应Map-->
+  <resultMap id="BaseResultMap" type="com.ks39.myblog.model.entity.blog">
+    <id column="blog_id" jdbcType="BIGINT" property="blog_id"></id>
+    <result column="blog_title" jdbcType="VARCHAR" property="blog_title" />
+    <result column="blog_description" jdbcType="VARCHAR" property="blog_description" />
+    <result column="blog_cover" jdbcType="VARCHAR" property="blog_cover" />
+    <result column="blog_content" jdbcType="LONGVARCHAR" property="blog_content" />
+    <result column="blog_status" jdbcType="TINYINT" property="blog_status" />
+    <result column="blog_view" jdbcType="BIGINT" property="blog_view" />
+    <result column="is_comment" jdbcType="TINYINT" property="is_comment" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time"></result>
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time"></result>
+
+    <!--额外属性：分类id和name-->
+    <result column="category_name" jdbcType="VARCHAR" property="category_name"></result>
+    <result column="category_id" jdbcType="BIGINT" property="category_id"></result>
+    <result column="count" jdbcType="INTEGER" property="count"></result>
+  </resultMap>
+
+<!--1. getRecentPostBlog(公共资源)-->
+  <select id="getRecentPostBlog" resultMap="BaseResultMap">
+    select *
+    from tb_blog
+    where blog_status = 1
+    order by update_time desc
+  </select>
+
+<!--2. getBlogs(index分页页面下的所有已发布博客列表)-->
+  <select id="getBlogs" resultMap="BaseResultMap">
+    SELECT b.*,c.category_id,c.category_name
+    FROM tb_blog b,tb_category c,tb_category_blog cb
+    WHERE b.blog_status = 1
+    AND b.blog_id = cb.blog_id
+    AND c.category_id = cb.category_id
+    ORDER BY b.update_time DESC
+  </select>
+
+<!--    1. join方式-->
+<!--    SELECT b.*,c.category_id,c.category_name-->
+<!--    FROM tb_blog b-->
+<!--    LEFT JOIN tb_tag_blog tb-->
+<!--    ON b.blog_id = tb.blog_id-->
+<!--    LEFT JOIN tb_category_blog cb-->
+<!--    ON b.blog_id = cb.blog_id-->
+<!--    LEFT JOIN tb_category c-->
+<!--    ON c.category_id = cb.category_id-->
+<!--    WHERE tb.tag_id = 1-->
+<!--    AND b.blog_status = 0-->
+<!--    ORDER BY b.update_time DESC-->
+
+<!--    2. from多表方式-->
+<!--    SELECT b.*,c.category_name,c.category_id-->
+<!--    FROM tb_blog b,tb_tag_blog tb,tb_category c,tb_category_blog cb-->
+<!--    WHERE tb.tag_id = 1-->
+<!--    AND b.blog_id = tb.blog_id-->
+<!--    AND b.blog_id = cb.blog_id-->
+<!--    AND c.category_id = cb.category_id-->
+<!--    AND b.blog_status = 0-->
+<!--    ORDER BY b.update_time DESC-->
+
+<!-- 3. getBlogsByTagId(获取tagId分页页面下博客列表)-->
+  <select id="getBlogsByTagId" resultMap="BaseResultMap">
+      SELECT b.*,c.category_name,c.category_id
+      FROM tb_blog b,tb_tag_blog tb,tb_category c,tb_category_blog cb
+      WHERE tb.tag_id = #{value}
+      AND b.blog_id = tb.blog_id
+      AND b.blog_id = cb.blog_id
+      AND c.category_id = cb.category_id
+      AND b.blog_status = 1
+      ORDER BY b.update_time DESC
+  </select>
+
+<!--4. getBlogsByCategoryId(获取categoryId分页页面下博客列表)-->
+  <select id="getBlogsByCategoryId" resultMap="BaseResultMap">
+    SELECT b.*,c.category_id,c.category_name
+    FROM tb_blog b, tb_category_blog cb,tb_category c
+    WHERE cb.category_id = #{value}
+    AND c.category_id = #{value}
+    AND b.blog_id = cb.blog_id
+    AND b.blog_status = 1
+    ORDER BY b.update_time DESC
+  </select>
+
+<!--5. getBlogsBySearch(获取符合search条件的分页页面的博客列表)-->
+  <select id="getBlogsBySearch" resultMap="BaseResultMap">
+    SELECT b.*,c.category_id,c.category_name
+    FROM tb_blog b, tb_category_blog cb,tb_category c
+    WHERE b.blog_title like CONCAT('%',#{value},'%')
+    AND b.blog_id = cb.blog_id
+	AND c.category_id = cb.category_id
+    AND b.blog_status = 1
+    ORDER BY b.update_time DESC
+  </select>
+
+<!--6. getBlogById(获取博客内容，包括category_id和category_name)-->
+  <select id="getBlogById" resultMap="BaseResultMap">
+    SELECT b.*,c.category_id,c.category_name
+    FROM tb_blog b, tb_category_blog cb,tb_category c
+    WHERE cb.blog_id = ${value}
+    AND b.blog_id = cb.blog_id
+	AND c.category_id = cb.category_id
+    AND b.blog_status = 1
+    ORDER BY b.update_time DESC
+  </select>
+
+<!--7. increaseView(增加浏览量)-->
+  <update id="increaseView">
+    UPDATE tb_blog
+    SET blog_view = blog_view + 1
+    WHERE blog_id = #{value}
+  </update>
+
+
+<!--后台管理-->
+<!--1. getBlogsNumber-->
+  <select id="getBlogsNumber" resultMap="BaseResultMap">
+    SELECT COUNT(*) AS count FROM tb_blog
+  </select>
+
+<!--2. getAllBlogs-->
+  <select id="getAllBlogs" resultMap="BaseResultMap">
+    SELECT b.*,c.category_id,c.category_name
+    FROM tb_blog b,tb_category c,tb_category_blog cb
+    WHERE b.blog_id = cb.blog_id
+    AND c.category_id = cb.category_id
+    ORDER BY b.update_time DESC
+  </select>
+
+<!--3. getBlogByBlogId(获取博客内容，包括category_id和category_name)-->
+  <select id="getBlogByBlogId" resultMap="BaseResultMap">
+    SELECT b.*,c.category_id,c.category_name
+    FROM tb_blog b, tb_category_blog cb,tb_category c
+    WHERE cb.blog_id = ${value}
+    AND b.blog_id = cb.blog_id
+	AND c.category_id = cb.category_id
+    ORDER BY b.update_time DESC
+  </select>
+
+<!--4. 删除博客-->
+  <delete id="deleteBlog">
+    delete from tb_blog where blog_id = #{value}
+  </delete>
+
+<!--3. 添加博客-->
+  <insert id="postBlog" useGeneratedKeys="true" keyProperty="blog_id">
+    insert into
+    tb_blog(
+    blog_id,
+    blog_title,
+    blog_description,
+    blog_cover,
+    blog_content,
+    blog_status,
+    is_comment,
+    create_time,
+    update_time
+    )
+    values(
+    null,
+    #{blog_title},
+    #{blog_description},
+    #{blog_cover},
+    #{blog_content},
+    #{blog_status},
+    #{is_comment},
+    current_timestamp ,
+    current_timestamp
+    )
+  </insert>
+
+
+<!--4. 更新博客-->
+  <update id="updateBlog">
+    update tb_blog
+
+    <trim prefix="set" suffixOverrides=",">
+      <if test="blog_title!=null">
+        blog_title=#{blog_title},
+      </if>
+      <if test="blog_content!=null">
+        blog_content=#{blog_content},
+      </if>
+      <if test="blog_description!=null">
+        blog_description=#{blog_description},
+      </if>
+      <if test="blog_cover!=null">
+        blog_cover=#{blog_cover},
+      </if>
+      <if test="blog_status!=null">
+        blog_status=#{blog_status},
+      </if>
+      <if test="is_comment!=null">
+        is_comment=#{is_comment},
+      </if>
+      update_time = current_timestamp
+    </trim>
+    where blog_id = #{blog_id}
+  </update>
+
+</mapper>

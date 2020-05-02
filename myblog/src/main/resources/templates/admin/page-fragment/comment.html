@@ -1,0 +1,250 @@
+<div id="AdminContent">
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+
+                </div>
+            </div>
+        </div>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">评论列表：</h3>
+                        </div>
+
+                        <div class="card-body">
+<!--                            <form>-->
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text">
+                                        <i class="fa fa-calendar"></i>
+                                      </span>
+                                    </div>
+                                    <input type="text" class="form-control float-right" id="reservation">
+                                    <button class="btn btn-info" id="searchDate" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+<!--                            </form>-->
+                            <hr>
+
+                            <div class="table-responsive" >
+                                <table class="table table-bordered table-striped">
+                                    <!--表头-->
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>所属博客</th>
+                                        <th>回复</th>
+                                        <th>评论人</th>
+                                        <th>评论人email</th>
+                                        <th>评论内容</th>
+                                        <th>状态</th>
+                                        <th>IP地址</th>
+                                        <th>评论时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+
+                                    <!--数据-->
+                                    <tbody>
+                                    <tr th:each="comment,i:${comments.list}">
+
+                                        <td th:text="${i.count}" scope="row"></td>
+
+                                        <td th:text="${comment.blog_title}"></td>
+
+                                        <td th:text="${comment.reply_to}"></td>
+
+                                        <td th:text="${comment.comment_name}"></td>
+
+                                        <td th:text="${comment.comment_email}"></td>
+
+                                        <td th:text="${comment.comment_content}"></td>
+
+                                        <!--                                        状态 1:正常，0:屏蔽-->
+                                        <td th:if="${comment.comment_status} == '1' " style="color: lightgreen">正常</td>
+                                        <td th:if="${comment.comment_status} == '0' " style="color: red">屏蔽</td>
+
+                                        <td th:text="${comment.comment_ip}"></td>
+
+                                        <td th:text="${#dates.format(comment.create_time,'yyyy-MM-dd HH:mm:ss')}"></td>
+
+                                        <!--修改和按钮-->
+                                        <td>
+                                            <button th:data-id="${comment.comment_id}" th:data-content="${comment.comment_content}"
+                                                    onclick="edit(this.getAttribute('data-id'),this.getAttribute('data-content'));"
+                                                    class="btn small btn-primary" type="button">修改</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+
+                                <!--分页插件-->
+                                <div class="card-footer clearfix" th:if="${comments.pages} > 1">
+                                    <ul class="pagination pagination-sm m-0">
+                                        <li class="page-item" th:if="${comments.hasPreviousPage}">
+                                            <a class="page-link" th:href="@{/admin/comment(page=${comments.prePage})}">Pre</a>
+                                        </li>
+
+                                        <li class="page-item" th:if="${comments.navigateFirstPage} != 1 ">
+                                            <a class="page-link" th:href="@{/admin/comment(page=1)}">First</a>
+                                        </li>
+
+                                        <li class="page-item" th:each="page:${comments.navigatepageNums}"
+                                            th:classappend="${page}==${comments.pageNum}?'active'">
+                                            <a class="page-link" th:href="@{/admin/comment(page=${page})}" th:text="${page}"></a>
+                                        </li>
+
+                                        <li class="page-item" th:if="${comments.navigateLastPage} < ${comments.pages}">
+                                            <a class="page-link" th:href="@{/admin/comment(page=${comments.pages})}">Last</a>
+                                        </li>
+
+                                        <li class="page-item" th:if="${comments.hasNextPage}">
+                                            <a class="page-link" th:href="@{/admin/comment(page=${comments.nextPage})}">Next</a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!--修改模态框-->
+                        <div class="modal fade" id="editModal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" style="float: left">修改：</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <form>
+
+                                            <input id="commentId" type="hidden">
+
+                                            <!--head_title-->
+                                            <label>评论内容:</label>
+                                            <!--bootstrap验证需要:
+                                            1. div class="form-group"
+                                            2. input class="form-control"
+                                            -->
+                                            <div class="form-group">
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                                <span class="input-group-text">
+                                                                    <i class="fa fa-comment"></i>
+                                                                </span>
+                                                    </div>
+                                                    <input id="commentContent" class="form-control" disabled>
+                                                </div>
+                                            </div>
+                                            <hr>
+
+                                            <!--head_title-->
+                                            <label>修改评论状态:</label>
+                                            <!--bootstrap验证需要:
+                                            1. div class="form-group"
+                                            2. input class="form-control"
+                                            -->
+                                            <div class="form-group" id="status">
+                                                <label>正常：
+                                                    <input value="1" type="radio" name="r3" class="flat-red" checked>
+                                                </label>
+                                                <br>
+                                                <label>屏蔽：
+                                                    <input value="0" type="radio" name="r3" class="flat-red">
+                                                </label>
+                                            </div>
+
+                                            <hr>
+
+                                            <div class="card-footer">
+                                                <button type="button" class="btn btn-info" id="editCommentButton">修改</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!--pjax为true时调用这个-->
+    <script type="text/javascript">
+
+        //4. 修改事件模态框
+        function edit(id,content) {
+            //1. 打开模态框
+            $("#editModal").modal();
+
+            //2. 回填数据
+            $("#commentId").val(id);
+            $("#commentContent").val(content);
+        }
+
+        //5. 修改事件
+        $("#editCommentButton").click(function () {
+
+            //4. 提取数据
+            var url = "/admin/comment/edit";
+            var data = {
+                comment_id : $("#commentId").val(),
+                comment_status : $("#status input:checked").val(),
+            };
+
+            alert("修改成功");
+            $("#editModal").modal('hide');   //隐藏模态框
+            $('.modal-backdrop').remove();//去掉遮罩层
+            $("#AdminContent").load(url,data);
+        });
+
+        //初始化Date range picker
+        $('#reservation').daterangepicker();
+        //Date range picker with time picker
+        $('#reservationtime').daterangepicker({
+            timePicker         : true,
+            timePickerIncrement: 30,
+        });
+
+        $('input[id="reservation"]').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+        });
+
+        //搜素事件
+        $("#searchDate").click(function () {
+            var time = $("#reservation").val();
+            var times = time.split(' - ');
+
+            var url = "/admin/comment/search";
+            var data = {
+              start_time: times[0],
+              end_time: times[1],
+            };
+
+            $("#AdminContent").load(url,data);
+        });
+
+        //初始化checkbox样式
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass   : 'iradio_flat-green'
+        })
+
+    </script>
+
+</div>

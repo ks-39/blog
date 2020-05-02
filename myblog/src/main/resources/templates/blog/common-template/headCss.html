@@ -1,0 +1,43 @@
+<!--设置片段名为head(网页title标签text)-->
+<head th:fragment="head(title)">
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="author" content="smartit-source">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="cache-control" content="no-cache">
+
+    <!-- title here -->
+    <title th:text="${title}">Xfars - Personal Tour Travelers Blog HTML5 Template</title>
+
+    <!-- Favicon and Touch Icons -->
+    <link th:href="@{http://q956h1atc.bkt.clouddn.com/favicon _1_.png}" rel="shortcut icon">
+
+    <!-- Fonts -->
+    <link th:href="@{https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900}" rel="stylesheet">
+    <link th:href="@{/blog/css/font-awesome.min.css}" rel="stylesheet">
+    <link th:href="@{/blog/css/flaticon.css}" rel="stylesheet">
+
+    <!-- Plugin CSS -->
+    <link th:href="@{/blog/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/blog/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/blog/css/magnific-popup.css}" rel="stylesheet">
+    <link th:href="@{/blog/css/owl.carousel.css}" rel="stylesheet">
+    <link th:href="@{/blog/css/owl.theme.css}" rel="stylesheet">
+    <link th:href="@{/blog/css/owl.transitions.css}" rel="stylesheet">
+    <link th:href="@{/blog/css/jquery.barfiller.css}" rel="stylesheet">
+
+    <!--Theme custom css -->
+    <link th:href="@{/blog/css/style.css}" rel="stylesheet">
+
+    <!--Theme Responsive css-->
+    <link th:href="@{/blog/css/responsive.css}" rel="stylesheet"/>
+    <!--代码高亮-->
+    <link th:href="@{/blog/js/prism/prism.css}" rel="stylesheet">
+
+    <script th:src="@{/blog/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js}"></script>
+
+
+
+</head>
+<!--headCss End-->

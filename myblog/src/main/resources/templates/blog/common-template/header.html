@@ -1,0 +1,64 @@
+<!--header start-->
+<header class="header-area">
+    <div class="container">
+        <div class="row">
+
+            <!--网易云播放器-->
+            <div class="col-md-3 col-xs-8">
+                <div class="social-media">
+                    <ul style="font-size: 15px;color: #46b8da">
+                        <li>
+                            <a href="https://music.163.com/#/user/home?id=401463205" target="_blank" style="color: #5bc0de;border: 0.5px solid #46b8da;">
+                                <i class="fa fa-music"></i>
+                            </a>
+                        </li>
+                        Tips:若无法播放是因为需要VIP
+                    </ul>
+                </div>
+
+                <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=278 height=240 th:src="@{//music.163.com/outchain/player?type=0&id=4885009414&auto=0&height=430}"></iframe>
+            </div>
+
+            <!--导航条-->
+            <div class="col-md-7">
+                <div class="menu-area white">
+                    <nav>
+                        <ul>
+                            <li>
+                                <a th:href="@{/}">Home</a>
+                            </li>
+
+                            <li class="active sub">
+                                <a th:href="@{#}">
+                                    Categories
+                                    <span class="fa fa-angle-down"></span>
+                                </a>
+                                <ul class="sub-menu">
+<!---->
+                                    <li th:each="category: ${categories}">
+                                        <a th:href="@{/category(categoryId=${category.category_id})}"
+                                           th:text="${category.category_name}">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <!--隐藏导航栏-->
+            <div class="col-md-2 col-xs-4">
+                <div class="humbargar-area">
+                    <div class="menu-icon text-right">
+                        <span class="flaticon-menu humbargar color"></span>
+                    </div>
+                    <div class="close-area">
+                        <span class="close"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!--header end-->

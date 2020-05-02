@@ -1,0 +1,228 @@
+<div id="footer" th:each="config:${configs}">
+    <footer th:if="${config.background_image} != '' " class="footer-area" th:style=" 'background: url(' + ${config.background_image} + ') no-repeat; background-size: cover; background-position: center; padding-top: 75px; padding-bottom: 0px; background-attachment: fixed;' ">
+        <div class="footer-top">
+            <div class="container" style="background-color: rgba(136,207,255,0.7);">
+                <div class="row">
+
+                    <!--nick_name & footer_info-->
+                    <div class="col-md-4">
+                        <div class="footer-widget widget-text">
+                            <div class="footer-logo">
+                                <h2>
+
+                                    <a href="#" th:if="${config.nick_name} != '' " th:text="${config.nick_name}">
+                                    </a>
+
+                                    <a href="#" th:if="${config.nick_name} == '' ">k$-39
+                                    </a>
+
+                                </h2>
+                            </div>
+
+                            <div class="widget-content" style="word-wrap: break-word">
+                                <p th:if="${config.footer_info} != '' " th:text="${config.footer_info}" style="font-size: 20px"></p>
+
+                                <p th:if="${config.footer_info} == '' " style="font-size: 20px">
+                                    有志者，事竟成，奥力给！
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!--categories-->
+                    <div class="col-md-2">
+                        <div class="footer-widget widget-nave">
+                            <div class="widget-title">
+                                <h3>Categories</h3>
+                            </div>
+                            <div class="widget-nave-list">
+                                <ul>
+                                    <li th:each="category:${categories}">
+                                        <a th:href="@{/category(categoryId=${category.category_id})}">
+                                            [[${category.category_name}]]
+                                            <span th:text=" ${category.count} " style="float: right"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!--recent Post-->
+                    <div class="col-md-3">
+                        <div class="footer-widget widget-recent-post">
+                            <div class="widget-title">
+                                <h3>Recent Post</h3>
+                            </div>
+                            <div class="recent-post-list">
+
+                                <div class="single-post" th:each="recentPostBlog:${recentPostBlogs.list}">
+
+                                    <div class="post-title" style="background-color: rgba(137,207,255,0.6)">
+                                        <p>
+                                            <a th:href="@{/blog(blogId=${recentPostBlog.blog_id})}"
+                                               th:text="${recentPostBlog.blog_title}" style="word-wrap: break-word">
+                                            </a>
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--contact Me-->
+                    <div class="col-md-3">
+                        <div class="footer-widget widget-Subscribe">
+                            <div class="widget-title">
+                                <h3>My Wechat</h3>
+                            </div>
+
+                            <div th:each="config:${configs}">
+                                <img th:src="@{${config.wechat_image}}"/>
+
+                                <h3 th:if="${config.wechat_image} == '' ">
+                                    请添加联系方式
+                                </h3>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="copyright-area">
+                            <p>&copy; 2020 k$-39 . All rights Reserved.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="footer-right text-right">
+                            <p>Design By <a href="http://www.bootstrapmb.com/" title="bootstrapmb">Createuiux</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <footer th:if="${config.background_image} == '' " class="footer-area" style="background: url(http://q956h1atc.bkt.clouddn.com/205524-1566651324f88b.jpg) no-repeat; background-size: cover; background-position: center; padding-top: 75px; padding-bottom: 0px; background-attachment: fixed;">
+        <div class="footer-top">
+            <div class="container" style="background-color: rgba(136,207,255,0.7);">
+                <div class="row">
+
+                    <!--nick_name & footer_info-->
+                    <div class="col-md-4">
+                        <div class="footer-widget widget-text">
+                            <div class="footer-logo">
+                                <h2>
+
+                                    <a href="#" th:if="${config.nick_name} != '' " th:text="${config.nick_name}">
+                                    </a>
+
+                                    <a href="#" th:if="${config.nick_name} == '' ">k$-39
+                                    </a>
+
+                                </h2>
+                            </div>
+
+                            <div class="widget-content" style="word-wrap: break-word">
+                                <p th:if="${config.footer_info} != '' " th:text="${config.footer_info}" style="font-size: 20px"></p>
+
+                                <p th:if="${config.footer_info} == '' " style="font-size: 20px">
+                                    有志者，事竟成，奥力给！
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!--categories-->
+                    <div class="col-md-2">
+                        <div class="footer-widget widget-nave">
+                            <div class="widget-title">
+                                <h3>Categories</h3>
+                            </div>
+                            <div class="widget-nave-list">
+                                <ul>
+                                    <li th:each="category:${categories}">
+                                        <a th:href="@{/category(categoryId=${category.category_id})}">
+                                            [[${category.category_name}]]
+                                            <span th:text=" ${category.count} " style="float: right"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!--recent Post-->
+                    <div class="col-md-3">
+                        <div class="footer-widget widget-recent-post">
+                            <div class="widget-title">
+                                <h3>Recent Post</h3>
+                            </div>
+                            <div class="recent-post-list">
+
+                                <div class="single-post" th:each="recentPostBlog:${recentPostBlogs.list}">
+
+                                    <div class="post-title" style="background-color: rgba(137,207,255,0.6)">
+                                        <p>
+                                            <a th:href="@{/article(articleId=${recentPostBlog.blog_id})}"
+                                               th:text="${recentPostBlog.blog_title}" style="word-wrap: break-word">
+                                            </a>
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--contact Me-->
+                    <div class="col-md-3">
+                        <div class="footer-widget widget-Subscribe">
+                            <div class="widget-title">
+                                <h3>My Wechat</h3>
+                            </div>
+
+                            <div th:each="config:${configs}">
+                                <img th:src="@{${config.wechat_image}}"/>
+
+                                <h3 th:if="${config.wechat_image} == '' ">
+                                    请添加联系方式
+                                </h3>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="copyright-area">
+                            <p>&copy; 2020 k$-39 . All rights Reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>

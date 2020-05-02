@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ks39.myblog.mapper.commentMapper">
+
+  <!--数据库字段与实体类属性对应Map-->
+  <resultMap id="BaseResultMap" type="com.ks39.myblog.model.entity.comment">
+    <id column="comment_id" jdbcType="INTEGER" property="comment_id"></id>
+    <result column="blog_id" jdbcType="INTEGER" property="blog_id" />
+    <result column="parent_comment_id" jdbcType="INTEGER" property="parent_comment_id" />
+    <result column="reply_to" jdbcType="VARCHAR" property="reply_to" />
+    <result column="comment_name" jdbcType="VARCHAR" property="comment_name" />
+    <result column="comment_email" jdbcType="VARCHAR" property="comment_email" />
+    <result column="comment_content" jdbcType="VARCHAR" property="comment_content" />
+    <result column="comment_status" jdbcType="INTEGER" property="comment_status" />
+    <result column="comment_ip" jdbcType="INTEGER" property="comment_ip" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+
+    <!--额外属性-->
+    <result column="count" jdbcType="INTEGER" property="count"></result>
+    <result column="blog_title" jdbcType="VARCHAR" property="blog_title"></result>
+
+    <!--额外属性：根据parent_id查询子comment-->
+    <collection property="subComments" ofType="com.ks39.myblog.model.entity.comment"
+                select="com.ks39.myblog.mapper.commentMapper.getSubCommentsByParentId"
+                column="comment_id">
+    </collection>
+
+  </resultMap>
+
+  <!--0. getSubCommentsByParentId(工具sql，将getCommentsByBlogId查询得到的每个comment_id都代入该工具sql查询，将结果封装为subComments)-->
+  <select id="getSubCommentsByParentId" resultType="com.ks39.myblog.model.entity.comment">
+    SELECT *
+    FROM tb_comment
+    WHERE parent_comment_id = #{value}
+  </select>
+
+<!--1. addComment(因为在前端已经做了校验，数据库就不进行if test了，做也可以)-->
+  <insert id="addComment">
+    insert into tb_comment(
+    comment_id,
+    blog_id,
+    parent_comment_id,
+    reply_to,
+    comment_name,
+    comment_email,
+    comment_content,
+    comment_status,
+    create_time,
+    update_time,
+    comment_ip
+    )
+    values
+    (null,
+    #{blog_id},
+    #{parent_comment_id},
+    #{reply_to},
+    #{comment_name},
+    #{comment_email},
+    #{comment_content},
+    #{comment_status},
+    current_timestamp ,
+    current_timestamp ,
+    #{comment_ip})
+  </insert>
+
+  <!--2. getCommentsByBlogId(回显博客内容页的评论列表)
+  1. 先获取父评论(parent_comment_id 为 null即为父评论)
+  2. 然后调用getSubCommentsByParentId，逐一查询该父评论下的评论
+  -->
+  <select id="getCommentsByBlogId" resultMap="BaseResultMap">
+    SELECT *
+    FROM tb_comment
+    WHERE blog_id = #{value}
+    AND comment_status = 1
+    AND parent_comment_id is null
+    ORDER BY create_time
+  </select>
+
+
+<!--后台管理-->
+<!--1. getCommentsNumber-->
+  <select id="getCommentsNumber" resultMap="BaseResultMap">
+    SELECT COUNT(*) AS count FROM tb_comment
+  </select>
+
+<!--2. 评论列表-->
+  <select id="getComments" resultMap="BaseResultMap">
+    SELECT c.*,b.blog_title
+    FROM tb_comment c,tb_blog b
+    WHERE c.blog_id = b.blog_id
+  </select>
+
+<!--3. 修改评论-->
+  <update id="editComment">
+    update tb_comment
+    <trim prefix="set" suffixOverrides=",">
+      <if test="comment_status != null">
+        comment_status = #{comment_status},
+      </if>
+    </trim>
+    where comment_id = #{comment_id}
+  </update>
+
+<!--4. 搜索评论-->
+  <select id="searchComment" resultMap="BaseResultMap">
+    SELECT *
+    FROM tb_comment
+    WHERE create_time BETWEEN #{startTime} AND #{endTime}
+    ORDER BY create_time
+  </select>
+</mapper>

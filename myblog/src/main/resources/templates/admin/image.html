@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!--导入thymeleaf-->
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--1. 引入headerCss-->
+<head th:replace="admin/common-template/headCss::head('Admin | Image')"></head>
+
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+    <!--2. 引入header代码-->
+    <nav th:replace="admin/common-template/header"></nav>
+
+    <!--3. 引入sidebar-menu-->
+    <aside th:replace="admin/common-template/sidebar-menu"></aside>
+
+    <!--4. 引入index-->
+    <div th:replace="admin/page-fragment/image"></div>
+
+    <aside class="control-sidebar control-sidebar-dark">
+    </aside>
+
+</div>
+
+<!--6. 引入footer-->
+<footer th:replace="admin/common-template/footer"></footer>
+
+<!--7. 引入footerScript-->
+<th:block th:replace="admin/common-template/footScript"/>
+
+<!--8. 引入pjax-->
+<th:block th:replace="admin/common-template/pjax"/>
+
+<!--pjax为null时调用这个js-->
+<script type="text/javascript">
+
+    $("#uploadImage").click(function () {
+        $("#uploadModal").modal();
+        return;
+    });
+
+    //初始化上传的fileinput控件
+    $("#uploadButton").fileinput({
+        language : 'zh',
+        uploadUrl : "/admin/image/upload",
+        showUpload: true, //是否显示上传按钮
+        showRemove : true, //显示移除按钮
+        showPreview : true, //是否显示预览
+        showCaption: false,//是否显示标题
+        autoReplace : true,
+        minFileCount: 0,
+        uploadAsync: false,
+        maxFileSize:0,      //文件大小限制，单位为kb，0代表不限制，需要在application配置文件中配置multpart的maxfilesize限制
+        maxFileCount: 5,//最大上传数量
+        browseOnZoneClick: true,
+        validateInitialCount: true,
+        msgFilesTooMany: "选择上传的文件数量 超过允许的最大数值！",
+        enctype: 'multipart/form-data',
+        allowedFileExtensions : [ "jpg", "png", "gif","jpeg","bmp" ],
+        fileActionSettings: {                               // 在预览窗口中为新选择的文件缩略图设置文件操作的对象配置
+            showRemove: true,                                   // 显示删除按钮
+            showUpload: true,                                   // 显示上传按钮
+            showZoom: true,                                    // 显示预览按钮
+            removeIcon: '<i class="fa fa-trash"></i>',   // 删除图标
+            uploadIcon: '<i class="fa fa-upload"></i>',     // 上传图标
+            uploadRetryIcon: '<i class="fa fa-repeat"></i>',  // 重试图标
+            zoomIcon : "<i class='fa fa-search'></i>"        //预览图标
+        },
+    }).on("filebatchuploadsuccess", function() {     //多图片上传，成功后回调函数
+
+    }).on('fileerror', function() {  //一个文件上传失败
+        alert("上传失败，请重试");
+        location.reload();
+    }).on('fileuploaded', function() {  //单一文件上传成功回调
+
+    });
+</script>
+
+</body>
+
+</html>

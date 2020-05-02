@@ -1,0 +1,293 @@
+<div id="AdminContent">
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+
+                </div>
+            </div>
+        </div>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">分类列表：</h3>
+                        </div>
+
+                        <div class="card-body">
+                            <button id="AddCategory" type="button" class="btn btn-info">
+                                <i class="fa fa-plus">&nbsp;Add</i>
+                            </button>
+
+                            <form th:action="@{/admin/category/search}" id="SearchForm" style="float: right">
+                                <input type="text" id="search" name="search" placeholder="Serach" style="border-radius: 5px;border: 1px solid #46b8da">
+                                <button class="btn btn-info">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </form>
+
+                            <hr>
+
+                            <div class="table-responsive" >
+                                <table id="imageList" class="table table-bordered table-striped">
+                                    <!--表头-->
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>分类名</th>
+                                        <th>博客数量</th>
+                                        <th>创建时间</th>
+                                        <th>修改时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+
+                                    <!--数据-->
+                                    <tbody>
+                                    <tr th:each="category,i:${categories.list}">
+
+                                        <td th:text="${i.count}" scope="row"></td>
+
+                                        <td th:text="${category.category_name}"></td>
+
+                                        <td th:text="${category.count}"></td>
+
+                                        <td th:text="${#dates.format(category.create_time,'yyyy-MM-dd HH:mm:ss')}"></td>
+
+                                        <td th:text="${#dates.format(category.update_time,'yyyy-MM-dd HH:mm:ss')}"></td>
+
+                                        <!--修改和删除按钮-->
+                                        <td>
+                                            <button th:data-id="${category.category_id}" th:data-name="${category.category_name}"
+                                                    onclick="edit(this.getAttribute('data-id'),this.getAttribute('data-name'));"
+                                                    class="btn small btn-primary" type="button">修改
+                                            </button>
+
+                                            <button th:data-id="${category.category_id}" th:data-count="${category.count}"
+                                                    onclick="deleteById(this.getAttribute('data-id'),this.getAttribute('data-count'));"
+                                                    class="btn small btn-danger" type="button">删除
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+
+                                <!--分页插件-->
+                                <div class="card-footer clearfix" th:if="${categories.pages} > 1">
+                                    <ul class="pagination pagination-sm m-0">
+                                        <li class="page-item" th:if="${categories.hasPreviousPage}">
+                                            <a class="page-link" th:href="@{/admin/category(page=${categories.prePage})}">Pre</a>
+                                        </li>
+
+                                        <li class="page-item" th:if="${categories.navigateFirstPage} != 1 ">
+                                            <a class="page-link" th:href="@{/admin/category(page=1)}">First</a>
+                                        </li>
+
+                                        <li class="page-item" th:each="page:${categories.navigatepageNums}"
+                                            th:classappend="${page}==${categories.pageNum}?'active'">
+                                            <a class="page-link" th:href="@{/admin/category(page=${page})}" th:text="${page}"></a>
+                                        </li>
+
+                                        <li class="page-item" th:if="${categories.navigateLastPage} < ${categories.pages}">
+                                            <a class="page-link" th:href="@{/admin/category(page=${categories.pages})}">Last</a>
+                                        </li>
+
+                                        <li class="page-item" th:if="${categories.hasNextPage}">
+                                            <a class="page-link" th:href="@{/admin/category(page=${categories.nextPage})}">Next</a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!--添加模态框-->
+                        <div class="modal fade" id="addModal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" style="float: left">添加Category</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <form>
+
+                                            <!--head_title-->
+                                            <label for="addCategoryName">分类名(20字以内)：</label>
+                                            <!--bootstrap验证需要:
+                                            1. div class="form-group"
+                                            2. input class="form-control"
+                                            -->
+                                            <div class="form-group">
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="fa fa-pencil"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input name="category_name" id="addCategoryName" type="text" class="form-control" placeholder="请输入分类名" maxlength="20">
+                                                </div>
+                                            </div>
+                                            <hr>
+
+                                            <div class="card-footer">
+                                                <button type="button" class="btn btn-info" id="addCategoryButton">添加</button>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--修改模态框-->
+                        <div class="modal fade" id="editModal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" style="float: left">修改Tag：</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <form>
+
+                                            <input id="categoryId" type="hidden">
+
+                                            <!--head_title-->
+                                            <label for="editCategoryName">分类名(20字以内):</label>
+                                            <!--bootstrap验证需要:
+                                            1. div class="form-group"
+                                            2. input class="form-control"
+                                            -->
+                                            <div class="form-group">
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="fa fa-pencil"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input name="category_name" id="editCategoryName" type="text" class="form-control" placeholder="请输入分类名" maxlength="20">
+                                                </div>
+                                            </div>
+                                            <hr>
+
+                                            <div class="card-footer">
+                                                <button type="button" class="btn btn-info" id="editCategoryButton">修改</button>
+                                            </div>
+
+                                        </form>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!--pjax为true时调用这个-->
+    <script type="text/javascript">
+
+        //1. 添加事件模态框
+        $("#AddCategory").click(function () {
+            $("#addModal").modal();
+            return;
+        });
+
+        //2. 添加事件
+        $("#addCategoryButton").click(function () {
+
+            //1. 自定义校验
+            var name = $("#addCategoryName").val();
+            if($.trim(name) === ''){
+                alert("请输入分类名");
+                return ;
+            }
+
+            //2. 提取数据
+            var url = "/admin/category/add";
+            var data = {
+                category_name : $("#addCategoryName").val(),
+            };
+
+            alert("添加成功");
+            $("#addModal").modal('hide');   //隐藏模态框
+            $('.modal-backdrop').remove();//去掉遮罩层
+            $("#AdminContent").load(url,data);
+        });
+
+        //3. 删除事件
+        function deleteById(id,count) {
+
+            var certify = count;
+
+            if(certify != '0'){
+                alert("该分类下还有博客，无法删除！");
+            }else {
+                var msg = confirm("您真的确定要删除吗？");
+                if(msg == true) {
+
+                    var url = "/admin/category/delete";
+                    var data = {
+                        category_id: id
+                    };
+                    alert("删除成功");
+                    $("#AdminContent").load(url, data);
+                }else {
+
+                    return false;
+                }
+            }
+        }
+
+        //4. 修改事件模态框
+        function edit(id,name) {
+            //1. 打开模态框
+            $("#editModal").modal();
+
+            //2. 回填数据
+            $("#categoryId").val(id);
+            $("#editCategoryName").val(name);
+        }
+
+        //5. 修改事件
+        $("#editCategoryButton").click(function () {
+
+            //3. 自定义校验
+            var test_name = $("#editCategoryName").val();
+            if($.trim(test_name) === ''){
+                alert("请输入分类名");
+                return;
+            }
+
+            //4. 提取数据
+            var url = "/admin/category/edit";
+            var data = {
+                category_id : $("#categoryId").val(),
+                category_name : $("#editCategoryName").val(),
+            };
+
+            alert("修改成功");
+            $("#editModal").modal('hide');   //隐藏模态框
+            $('.modal-backdrop').remove();//去掉遮罩层
+            $("#AdminContent").load(url,data);
+        });
+
+    </script>
+</div>

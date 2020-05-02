@@ -1,0 +1,156 @@
+<div id="AdminContent">
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+
+                </div>
+            </div>
+        </div>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">博客列表：</h3>
+                        </div>
+
+                        <div class="card-body">
+                            <a th:href="@{/admin/blog/edit}">
+                                <button id="AddCategory" type="button" class="btn btn-success">
+                                    <i class="fa fa-plus">&nbsp;New</i>
+                                </button>
+                            </a>
+
+                            <form th:action="@{/admin/blog/search}" id="SearchForm" style="float: right">
+                                <input type="text" id="search" name="search" placeholder="Serach" style="border-radius: 5px;border: 1px solid #46b8da">
+                                <button class="btn btn-info">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </form>
+
+                            <hr>
+
+                            <div class="table-responsive" >
+                                <table id="imageList" class="table table-bordered text-nowrap">
+                                    <!--表头-->
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>博客封面</th>
+                                        <th>博客标题</th>
+                                        <th>博客分类</th>
+                                        <th>博客简介</th>
+                                        <th>博客状态</th>
+                                        <th>可否评论</th>
+                                        <th>博客浏览量</th>
+                                        <th>博客创建时间</th>
+                                        <th>博客修改时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+
+                                    <!--数据-->
+                                    <tbody>
+                                    <tr th:each="blog,i:${blogs.list}">
+                                        <td th:text="${i.count}" scope="row"></td>
+                                        <td>
+                                            <a th:href="${blog.blog_cover}" target="_blank">
+                                                <img style="width: 220px;height: 150px" class="img-responsive" th:src="${blog.blog_cover}" alt="Photo">
+                                            </a>
+                                        </td>
+
+                                        <td th:text="${blog.blog_title}"></td>
+
+                                        <td th:text="${blog.category_name}"></td>
+
+                                        <td th:text="${blog.blog_description}"></td>
+
+                                        <td th:if="${blog.blog_status} == '1'" style="color: greenyellow">发布</td>
+                                        <td th:if="${blog.blog_status} == '0'" style="color: red">草稿</td>
+
+                                        <td th:if="${blog.is_comment} == '1'" style="color: green">可评论</td>
+                                        <td th:if="${blog.is_comment} == '0'" style="color: red">不可评论</td>
+
+                                        <td th:text="${blog.blog_view}"></td>
+
+                                        <td th:text="${#dates.format(blog.create_time,'yyyy-MM-dd HH:mm:ss')}"></td>
+
+                                        <td th:text="${#dates.format(blog.update_time,'yyyy-MM-dd HH:mm:ss')}"></td>
+
+                                        <!--修改和删除按钮-->
+                                        <td>
+                                            <a th:if="${blog.blog_status} == '1' " target="_blank" th:href="@{/blog(blogId=${blog.blog_id})}" class="btn small btn-success" type="button">查看</a>
+
+                                            <a th:href="@{/admin/blog/edit(blog_id=${blog.blog_id})}" class="btn small btn-primary" type="button">修改</a>
+
+                                            <button th:data-id="${blog.blog_id}"
+                                                    onclick="deleteById(this.getAttribute('data-id'));"
+                                                    class="btn small btn-danger" type="button">删除
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <!--分页插件-->
+                                <div class="card-footer clearfix" th:if="${blogs.pages} > 1">
+                                    <ul class="pagination pagination-sm m-0">
+                                        <li class="page-item" th:if="${blogs.hasPreviousPage}">
+                                            <a class="page-link" th:href="@{/admin/blog(page=${blogs.prePage})}">Pre</a>
+                                        </li>
+
+                                        <li class="page-item" th:if="${blogs.navigateFirstPage} != 1 ">
+                                            <a class="page-link" th:href="@{/admin/blog(page=1)}">First</a>
+                                        </li>
+
+                                        <li class="page-item" th:each="page:${blogs.navigatepageNums}"
+                                            th:classappend="${page}==${blogs.pageNum}?'active'">
+                                            <a class="page-link" th:href="@{/admin/blog(page=${page})}" th:text="${page}"></a>
+                                        </li>
+
+                                        <li class="page-item" th:if="${blogs.navigateLastPage} < ${blogs.pages}">
+                                            <a class="page-link" th:href="@{/admin/blog(page=${blogs.pages})}">Last</a>
+                                        </li>
+
+                                        <li class="page-item" th:if="${blogs.hasNextPage}">
+                                            <a class="page-link" th:href="@{/admin/blog(page=${blogs.nextPage})}">Next</a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!--pjax为true时调用这个-->
+    <script type="text/javascript">
+
+
+        //3. 删除事件
+        function deleteById(id) {
+
+            var msg = confirm("您真的确定要删除吗？");
+            if(msg == true) {
+
+                var url = "/admin/blog/delete";
+                var data = {
+                    blog_id: id
+                };
+                alert("删除成功");
+                $("#AdminContent").load(url, data);
+            }else {
+                return false;
+            }
+        }
+
+
+    </script>
+</div>

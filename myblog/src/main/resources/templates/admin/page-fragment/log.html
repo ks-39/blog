@@ -1,0 +1,142 @@
+<div id="AdminContent">
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+
+                </div>
+            </div>
+        </div>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">日志记录：</h3>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                      <span class="input-group-text">
+                                        <i class="fa fa-calendar"></i>
+                                      </span>
+                                </div>
+
+                                <input type="text" class="form-control float-right" id="reservation">
+                                <button class="btn btn-info" id="searchDate" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                            <hr>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <!--表头-->
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>IP</th>
+                                        <th>HTTP_URL</th>
+                                        <th>HTTP_TYPE</th>
+                                        <th>CLASS_METHOD</th>
+                                        <th>CLASS_METHOD_ARGS</th>
+                                        <th>METHOD_RESPONSE</th>
+                                        <th>记录时间</th>
+                                    </tr>
+                                    </thead>
+
+                                    <!--数据-->
+                                    <tbody>
+                                    <tr th:each="log,i:${logs.list}">
+
+                                        <td th:text="${i.count}" scope="row"></td>
+
+                                        <td th:text="${log.ip}"></td>
+
+                                        <td th:text="${log.HTTP_URL}"></td>
+
+                                        <td th:text="${log.HTTP_TYPE}"></td>
+
+                                        <td th:text="${log.CLASS_METHOD}"></td>
+
+                                        <td th:text="${log.CLASS_METHOD_ARGS}" style="height: 300px;width:600px;word-wrap: break-word"></td>
+
+                                        <td th:text="${log.METHOD_RESPONSE}"></td>
+
+                                        <td th:text="${#dates.format(log.create_time,'yyyy-MM-dd HH:mm:ss')}"></td>
+
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+
+                                <!--分页插件-->
+                                <div class="card-footer clearfix" th:if="${logs.pages} > 1">
+                                    <ul class="pagination pagination-sm m-0">
+                                        <li class="page-item" th:if="${logs.hasPreviousPage}">
+                                            <a class="page-link" th:href="@{/admin/log(page=${logs.prePage})}">Pre</a>
+                                        </li>
+
+                                        <li class="page-item" th:if="${logs.navigateFirstPage} != 1 ">
+                                            <a class="page-link" th:href="@{/admin/log(page=1)}">First</a>
+                                        </li>
+
+                                        <li class="page-item" th:each="page:${logs.navigatepageNums}"
+                                            th:classappend="${page}==${logs.pageNum}?'active'">
+                                            <a class="page-link" th:href="@{/admin/log(page=${page})}" th:text="${page}"></a>
+                                        </li>
+
+                                        <li class="page-item" th:if="${logs.navigateLastPage} < ${logs.pages}">
+                                            <a class="page-link" th:href="@{/admin/log(page=${logs.pages})}">Last</a>
+                                        </li>
+
+                                        <li class="page-item" th:if="${logs.hasNextPage}">
+                                            <a class="page-link" th:href="@{/admin/log(page=${logs.nextPage})}">Next</a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!--pjax为true时调用这个-->
+    <script type="text/javascript">
+
+        //初始化Date range picker
+        $('#reservation').daterangepicker();
+        //Date range picker with time picker
+        $('#reservationtime').daterangepicker({
+            timePicker         : true,
+            timePickerIncrement: 30,
+        });
+
+        $('input[id="reservation"]').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+        });
+
+        //搜素事件
+        $("#searchDate").click(function () {
+            var time = $("#reservation").val();
+            var times = time.split(' - ');
+
+            var url = "/admin/log/search";
+            var data = {
+                start_time: times[0],
+                end_time: times[1],
+            };
+
+            $("#AdminContent").load(url,data);
+        });
+
+    </script>
+
+</div>

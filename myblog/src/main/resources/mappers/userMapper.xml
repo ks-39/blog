@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ks39.myblog.mapper.userMapper">
+
+  <resultMap id="BaseResultMap" type="com.ks39.myblog.model.entity.user">
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+  </resultMap>
+
+  <select id="findByUsername" resultMap="BaseResultMap">
+    select * from tb_user where username = #{username}
+  </select>
+
+</mapper>

@@ -1,0 +1,403 @@
+<div id="BlogContent" class="col-lg-8" style="background-color: rgba(185,227,243,0.8)"
+     xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="blog-details-area section">
+        <!--博文-->
+        <div class="single-post box-shadow">
+            <!--题图-->
+            <div class="post-thumnile">
+                <div class="slide-thumbnile">
+                    <div class="single-image">
+                        <img th:src="@{${blog.blog_cover}}" alt="blog">
+                    </div>
+                </div>
+            </div>
+
+            <!--标题-->
+            <div class="post-title">
+                <h3 th:text="${blog.blog_title}"></h3>
+            </div>
+
+            <!--博客信息-->
+            <div class="blog-meta">
+                <ul>
+                    <li> <span class="flaticon-man-user user"></span>
+                        <p>
+                            <a th:href="${blog.category_id}" th:text="${blog.category_name}"></a>
+                        </p>
+                    </li>
+                    <li> <span class="flaticon-calendar clendar"></span>
+                        <p th:text="${#dates.format(blog.update_time,'yyyy-MM-dd HH:mm')}"></p>
+                    </li>
+                    <li> <span class="flaticon-chat comment"></span>View:
+                        <p th:text="${blog.blog_view}"></p>
+                    </li>
+                </ul>
+            </div>
+
+            <hr>
+
+            <!--博客内容（utext会解析html）-->
+            <div class="blog-content" th:utext="${blog.blog_content}">
+            </div>
+
+            <div class="social-share fix">
+                <div class="share-title pull-left">
+                    <h4>Tag:</h4>
+                </div>
+
+                <div class="share-media pull-right">
+
+                    <!--tag-->
+                    <div class="single-widget banner-widget box-shadow">
+
+                        <a th:each="tag:${tagList}"
+                           th:href="@{/tag(tagId=${tag.tag_id})}"
+                           class="btn btn-group-sm"
+                           style="margin: 3px; background: rgba(157,227,243,0.92);color: gray; border: 1px solid #8981ff ;">
+
+                            <span th:text="${tag.tag_name}"></span>&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--评论-->
+        <div class="comment-area box-shadow mt-70" th:if="${blog.is_comment} == '1'">
+            <div class="section-title">
+                <h3>Comment:</h3>
+            </div>
+
+            <!--局部刷新区域-->
+            <div th:fragment="comment" id="commentList">
+                <div class="comment-list" th:if="${comments.list}!= '' and ${#arrays.length(comments.list)} > 0">
+                    <div th:each="comment:${comments.list}">
+
+                        <!--父评论-->
+                        <div class="single-comment" >
+                            <!--默认头像-->
+                            <div class="member-image">
+                                <img th:src="@{http://q956h1atc.bkt.clouddn.com/微信图片_20200121191754.jpg}" alt="comment img">
+                            </div>
+
+                            <div class="comment-info">
+                                <!--评论人信息-->
+                                <div class="comment-title">
+                                    <h4>
+                                        <strong th:text="${comment.comment_name}"></strong>&nbsp;&nbsp;
+                                        <small style="color: black" th:text="${#dates.format(comment.create_time,'yyyy-MM-dd &nbsp; HH:mm')}"></small>
+                                    </h4>
+                                </div>
+
+                                <!--评论内容-->
+                                <div class="comment-content">
+                                    <p th:text="${comment.comment_content}"></p>
+                                </div>
+
+                                <!--回复按钮-->
+                                <div class="comment-replay">
+                                    <a class="replay-btn" th:parent_comment_id="${comment.comment_id}"
+                                        th:reply_to="${comment.comment_name}"
+                                        onclick="reply(this.getAttribute('parent_comment_id'), this.getAttribute('reply_to'))">
+                                        回复
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!--子评论（先判断子评论List是否为空）-->
+                        <div class="single-comment pl-100"
+                             th:if="${comment.subComments} != null  and  ${#arrays.length(comment.subComments)} > 0"
+                             th:each="subComment:${comment.subComments}">
+
+                            <div class="member-image">
+                                <img th:src="@{http://q956h1atc.bkt.clouddn.com/微信图片_20200121191754.jpg}" alt="comment img">
+                            </div>
+
+                            <div class="comment-info">
+                                <div class="comment-title">
+                                    <h4>
+                                        <strong th:text="${subComment.comment_name}"></strong>&nbsp;
+                                        @ <span th:text="${subComment.reply_to}"></span>&nbsp;&nbsp;
+                                        <small style="color: black" th:text="${#dates.format(subComment.create_time,'yyyy-MM-dd &nbsp; HH:mm')}"></small>
+                                    </h4>
+                                </div>
+
+                                <div class="comment-content">
+                                    <p th:text="${subComment.comment_content}"></p>
+                                </div>
+
+                                <div class="comment-replay">
+                                    <a  class="replay-btn" th:parent_comment_id="${comment.comment_id}"
+                                        th:reply_to="${subComment.comment_name}"
+                                        onclick="reply(this.getAttribute('parent_comment_id'), this.getAttribute('reply_to'))">
+                                        回复
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!--评论分页-->
+                <div class="pagination-area" th:if="${comments.pages} > 1">
+                    <div class="pagination" style="text-align: center">
+                        <ul>
+                            <!--有前一页的情况（下一页按钮） class="prev" 请求参数commentPage为pagehelper的prePage参数-->
+                            <li th:if="${comments.hasPreviousPage}" class="prev pull-left" style="width: 120px">
+                                <a onclick="prevPage()" id="prevPage">
+                                    Pre
+                                    <h3 th:text="${blog.blog_id}" hidden></h3>
+                                    <h4 th:text="${comments.prePage}" hidden></h4>
+                                </a>
+                            </li>
+
+                            <!--当前分页条的第一个页数不等于1时（First按钮） class="page" 请求参数commentPage为第一页-->
+                            <li th:if="${comments.navigateFirstPage} != 1 " class="page">
+                                <a onclick="firstPage()" id="firstPage">
+                                    First
+                                    <h3 th:text="${blog.blog_id}" hidden></h3>
+                                    <h4 hidden>1</h4>
+                                </a>
+                            </li>
+
+                            <!--当当前页为pageNum（当前页）时（激活页按钮），class = "page active"-->
+                            <li th:each="page:${comments.navigatepageNums}"
+                                class="page" th:classappend="${page}==${comments.pageNum}?'active'">
+                                <a onclick="currentPage(this)" th:text="${page}" th:blog_id="${blog.blog_id}">
+                                </a>
+                            </li>
+
+                            <!--当前导航条的最后一页页码部位最后一个页码（navigateLastPage）时(Last按钮)，class="page" -->
+                            <li th:if="${comments.navigateLastPage} < ${comments.pages}" class="page">
+
+                                <a onclick="lastPage()" id="lastPage">
+                                    Last
+                                    <h3 th:text="${blog.blog_id}" hidden></h3>
+                                    <h4 th:text="${comments.pages}" hidden></h4>
+                                </a>
+                            </li>
+
+                            <!--如果有下一页（next按钮）class="next pull-right"(放在右边)-->
+                            <li th:if="${comments.hasNextPage}" class="next pull-right">
+                                <a onclick="nextPage()" id="nextPage">
+                                    Next
+                                    <h3 th:text="${blog.blog_id}" hidden></h3>
+                                    <h4 th:text="${comments.nextPage}" hidden></h4>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <!--评论表单-->
+            <div class="comment-from mt-63">
+                <div class="section-title">
+                    <h3>Leave A Comment</h3>
+                </div>
+
+                <form id="commentForm">
+                    <input type="hidden" name="reply_to"/>
+                    <input type="hidden" name="blog_id" th:value="${blog.blog_id}"/>
+                    <input type="hidden" name="parent_comment_id"/>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group box-shadow">
+                                <input type="text" class="form-control" name="comment_name" placeholder="Your NickName">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group box-shadow">
+                                <input type="email" class="form-control" name="comment_email" placeholder="Email">
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group box-shadow">
+                                <textarea name="comment_content" cols="30" rows="10" placeholder="Message"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="from-btn">
+
+                                <!--type="submit"执行回调函数后会自动刷新当前页面！！！！要改成type="button"-->
+                                <button id="commentPostBtn" type="button" class="primary-btn">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+<script th:src="@{https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js}"></script>
+<script src="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
+<script type="text/javascript" language="javascript">
+
+
+// <!--评论分页函数-->
+    function nextPage(){
+        var url = '/comment';
+        var blogId = $("#nextPage").children("h3").text();
+        var commentPage = $("#nextPage").children("h4").text();
+        var data = {
+            'blogId':blogId,
+            'commentPage':commentPage,
+        };
+        $("#commentList").load(url,data);
+    }
+
+    function prevPage(){
+        var url = '/comment';
+        var blogId = $("#prevPage").children("h3").text();
+        var commentPage = $("#prevPage").children("h4").text();
+        var data = {
+            'blogId':blogId,
+            'commentPage':commentPage,
+        };
+        $("#commentList").load(url,data);
+    }
+
+    function currentPage(obj){      //将a标签作为参数传入
+        var url = '/comment';
+        var blogId = $(obj).attr("blog_id");
+        var commentPage = $(obj).text();
+        var data = {
+            'blogId':blogId,
+            'commentPage':commentPage,
+        };
+        $("#commentList").load(url,data);
+    }
+
+    function firstPage(){
+        var url = '/comment';
+        var blogId = $("#firstPage").children("h3").text();
+        var commentPage = $("#firstPage").children("h4").text();
+        var data = {
+            'blogId':blogId,
+            'commentPage':commentPage,
+        };
+        $("#commentList").load(url,data);
+    }
+
+    function lastPage(){
+        var url = '/comment';
+        var blogId = $("#lastPage").children("h3").text();
+        var commentPage = $("#lastPage").children("h4").text();
+        var data = {
+            'blogId':blogId,
+            'commentPage':commentPage,
+        };
+        $("#commentList").load(url,data);
+    }
+    // 评论分页函数
+
+
+        $("#commentPostBtn").click(function () {
+            var boo = $("#commentForm").data('bootstrapValidator').isValid();       //校验评论表单数据是否符合
+            if (boo) {
+                //如果符合，则执行提交函数
+                postdata();
+
+                //提交完后清空输入框
+                $("[name='comment_content']").attr("placeholder", "");
+                $("[name='parent_comment_id']").val(null);
+                $("[name='reply_to']").val(null);
+
+                $("[name='comment_email']").val('');
+                $("[name='comment_name']").val('');
+                $("[name='comment_content']").val('');
+            }
+        });
+
+        //发布评论函数
+        function postdata() {
+            var url = "/comment/post";
+            var data = {
+                //获取表单中的value(包括隐藏的文本框的值)
+                //左边为key，需要与实体类的对象名一致（如果使用了dto则需要与dto的相应属性名相对应，这样才能自动setter封装）
+                "parent_comment_id" : $("[name='parent_comment_id']").val(),
+                "blog_id" : $("[name='blog_id']").val(),
+                "reply_to" : $("[name='reply_to']").val(),
+                "comment_email" : $("[name='comment_email']").val(),
+                "comment_name" : $("[name='comment_name']").val(),
+                "comment_content" : $("[name='comment_content']").val(),
+            };
+
+            var func = function (data) {
+                $('#commentForm').data('bootstrapValidator').resetForm(true);
+            };
+
+            //commentList进行局部加载，加载返回的attribute，如何对commentForm表单进行清空
+            $("#commentList").load(url,data,func);
+        }
+
+        //回复按钮函数
+        function reply(parent_comment_id,reply_to){
+            //点击回复按钮后，在评论表单的content框中光标聚焦,添加@前缀和回复的人的昵称
+            $("[name='comment_content']").attr("placeholder", "@" + reply_to).focus();
+
+            //将传递的参数填入comment表单的parent_comment_id和reply_to输入框中
+            $("[name='parent_comment_id']").val(parent_comment_id);
+            $("[name='reply_to']").val(reply_to) ;
+        }
+
+        //校验输入框数据
+        $(document).ready(function() {
+            $('#commentForm').bootstrapValidator({      //指定defaultForm表单进行校验
+                message: '无效信息',
+                fields: {
+                    "comment_name": {
+                        message: '无效用户名',
+                        validators: {
+                            notEmpty: {
+                                message: '用户名不能为空'
+                            },
+                            stringLength: {
+                                min: 3,
+                                max: 18,
+                                message: '用户名在3到18个字符之间'
+                            }
+                        }
+                    },
+                    "comment_content": {
+                        message: '内容不合法',
+                        validators: {
+                            notEmpty: {
+                                message: '内容不能为空'
+                            },
+                            stringLength: {
+                                min: 3,
+                                max: 200,
+                                message: '内容在3到200个字符之间'
+                            }
+                        }
+                    },
+                    "comment_email": {
+                        validators: {
+                            emailAddress: {
+                                message: '邮箱无效'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Validate the form manually
+            $('#validateBtn').click(function() {
+                $('#commentForm').bootstrapValidator('validate');
+            });
+
+            $('#resetBtn').click(function() {
+                $('#commentForm').data('bootstrapValidator').resetForm(true);
+            });
+        });
+
+</script>
+
+</div>

@@ -1,0 +1,135 @@
+<!-- 主要局部刷新区域 (th:replace = mainContent)-->
+<div id="AdminContent">
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Main content （section填入class="row mb=2"）-->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+
+                    <!--博客管理-->
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h4 th:text="'博客数量：'+${blogsNumber.count}"></h4>
+                                <h5>博客管理</h5>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-document"></i>
+                            </div>
+                            <a th:href="@{/admin/blog}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!--评论管理-->
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h4 th:text="'评论数量：'+${commentsNumber.count}"></h4>
+                                <h5>评论管理</h5>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-chatbox-working"></i>
+                            </div>
+                            <a th:href="@{/admin/comment}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!--分类管理-->
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h4 th:text="'分类数量：'+${categoriesNumber.count}"></h4>
+                                <h5>分类管理</h5>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-filing"></i>
+                            </div>
+                            <a th:href="@{/admin/category}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!--标签管理-->
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-secondary-gradient">
+                            <div class="inner">
+                                <h4 th:text="'标签数量：'+${tagsNumber.count}"></h4>
+                                <h5>标签管理</h5>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-pricetag"></i>
+                            </div>
+                            <a th:href="@{/admin/tag}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!--日志监控(浏览量)-->
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h4 th:text="'浏览量：'+${views.count}"></h4>
+                                <h5>访问日志</h5>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-clipboard"></i>
+                            </div>
+                            <a th:href="@{/admin/view}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!--异常日志-->
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-danger">
+                            <div class="inner">
+                                <h4 th:text="'异常日志：'+${exceptions.count}"></h4>
+                                <h5>系统异常日志</h5>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-alert"></i>
+                            </div>
+                            <a th:href="@{/admin/exception}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!--图片管理-->
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h3>图片管理</h3>
+
+                                <p>管理云存储的图片</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-image"></i>
+                            </div>
+                            <a th:href="@{/admin/image}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!--个性化设置-->
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3>个性化设置</h3>
+                                <p>前端博客页面个性化设置</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-gear-b"></i>
+                            </div>
+                            <a th:href="@{/admin/config}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<!-- /.content-wrapper -->

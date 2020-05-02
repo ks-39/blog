@@ -1,0 +1,145 @@
+<div class="col-lg-4" style="background-color: rgba(190,227,243,0.7)">
+
+    <div class="sidebar-widget">
+        <!--search(/search)-->
+        <div class="single-widget search-widget box-shadow">
+            <div class="widget-inner">
+
+                <form th:action="@{/search}" id="SideBarSearch">
+                    <div class="search-from box-shadow">
+                        <input type="text" id="search" name="search" placeholder="Serach">
+                        <button class="search-icon">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        <!--personal information-->
+        <div class="single-widget profile-widget box-shadow">
+            <div class="widget-title">
+                <h3>About Me</h3>
+            </div>
+
+            <div class="widget-inner text-center" th:each="config:${configs}">
+
+                <!--avator-->
+                <div class="profile-img" >
+                    <a th:href="@{#}" >
+                        <img th:if="${config.avator} != '' " th:src="${config.avator}" alt="avator">
+
+                        <img th:if="${config.avator} == '' " th:src="@{/blog/MyPictures/avator.jpg}" alt="avator">
+                    </a>
+                </div>
+
+                <!--information-->
+                <div class="profile-name">
+                    <h3 th:if="${config.nick_name} != '' "  th:text="${config.nick_name}" style="font-size: 30px;color: #9b94ff;font-family: 微软雅黑"></h3>
+                    <h3 th:if="${config.nick_name} == '' "  style="font-size: 30px;color: #9b94ff;font-family: 微软雅黑">k$-39(请设置nick_name)</h3>
+
+
+                    <p th:if="${config.introduction} !='' " th:text="${config.introduction}"></p>
+                    <p th:if="${config.introduction} =='' " style="word-wrap: break-word">请设置introduction</p>
+                </div>
+                <hr>
+                <div class="profile-info">
+                    <p style="font-size: 20px;font-family: 新細明體-ExtB">Contact Me At</p>
+                </div>
+
+                <!--social media-->
+                <div class="social-media">
+                    <ul>
+                        <li th:each="link:${links}">
+                        <!--有则遍历，无则为空-->
+                            <a th:href="${link.link_url}" target="_blank">
+                                <i th:if="${link.link_name} == 'GitHub' " class="fa fa-github" ></i>
+                                <i th:if="${link.link_name} == 'Weibo' " class="fa fa-weibo"></i>
+                                <i th:if="${link.link_name} == 'BiliBili' " class="fa fa-bold"></i>
+                                <i th:if="${link.link_name} == 'Twitter' " class="fa fa-twitter"></i>
+                                <i th:if="${link.link_name} == 'Instagram' " class="fa fa-instagram"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!--category-->
+        <div class="single-widget category-widget box-shadow">
+            <div class="widget-inner">
+                <div class="widget-title">
+                    <h3>Category</h3>
+                </div>
+                <div class="category-list">
+                    <ul>
+
+                        <li>
+                            <a th:each="category:${categories}"
+                               th:href="@{/category(categoryId=${category.category_id})}">
+                                <!--不能使用th:text是因为span标签就算a标签的text内容，会覆盖span标签-->
+                                [[${category.category_name}]]
+                                <span th:text=" ${category.count} "></span>
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+
+        <!--tag-->
+        <div class="single-widget banner-widget box-shadow">
+            <div class="widget-inner" >
+
+                <div class="widget-title">
+                    <h3>Tag</h3>
+                </div>
+
+                <a th:each="tag:${tags}"
+                   th:href="@{/tag(tagId=${tag.tag_id})}"
+                   class="btn btn-group-sm"
+                   style="margin: 3px; background: rgba(157,227,243,0.92);color: gray; border: 1px solid #8981ff ;">
+
+                    <span th:text="${tag.tag_name}"></span>&nbsp;
+                    <span th:text=" '(' +${tag.count} + ')' "></span>
+                </a>
+
+            </div>
+        </div>
+
+        <!--Recent Post(blogSize=5)-->
+        <div class="single-widget recent-post-widget box-shadow">
+            <div class="widget-inner">
+                <div class="widget-title">
+                    <h3>Recent Post</h3>
+                </div>
+                <div class="recent-post-list">
+
+                    <div class="single-post" th:each="recentPostBlog:${recentPostBlogs.list}">
+
+                        <div class="posty-img">
+                            <a th:href="@{/blog(blogId=${recentPostBlog.blog_id})}">
+                                <img th:src="${recentPostBlog.blog_cover}">
+                            </a>
+                        </div>
+
+                        <div class="post-title">
+                            <h4>
+                                <a th:href="@{/blog(blogId=${recentPostBlog.blog_id})}"
+                                   th:text="${recentPostBlog.blog_title}" style="word-wrap: break-word">
+                                </a>
+                            </h4>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
